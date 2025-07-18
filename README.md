@@ -15,9 +15,6 @@
 - 可视化：基于开源图表库[ECharts](https://echarts.apache.org/zh/index.html) 和 [VChart](https://www.visactor.io/vchart) 编写，具有丰富的图表类型和适配大屏的主题效果；
 
 
-说明文档：
-![说明文档](readme/go-view-doc.png)
-
 工作台：
 ![工作台](readme/go-view-canvas.png)
 
