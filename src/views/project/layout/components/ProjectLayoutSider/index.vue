@@ -74,8 +74,8 @@ $siderHeight: 100vh;
             align-items: center;
             justify-content: space-between;
             flex-direction: column;
-            margin-top: 30px;
-            margin-bottom: 20px;
+            margin-top: 14px;
+            margin-bottom: 6px;
         }
 
         &-flex {
