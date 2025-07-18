@@ -42,10 +42,6 @@ export enum PageEnum {
     BASE_HOME_TEMPLATE = '/project/my-template',
     BASE_HOME_TEMPLATE_NAME = 'Project-My-Template',
 
-    // 模板市场
-    BASE_HOME_TEMPLATE_MARKET = '/project/template-market',
-    BASE_HOME_TEMPLATE_MARKET_NAME = 'Project-Template-Market',
-
     // 错误
     ERROR_PAGE_NAME_403 = 'ErrorPage403',
     ERROR_PAGE_NAME_404 = 'ErrorPage404',

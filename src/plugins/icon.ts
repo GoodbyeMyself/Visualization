@@ -77,7 +77,6 @@ import {
     Roadmap as RoadmapIcon,
     SpellCheck as SpellCheckIcon,
     GraphicalDataFlow as GraphicalDataFlowIcon,
-    Store as StoreIcon,
     Devices as DevicesIcon,
     ObjectStorage as ObjectStorageIcon,
     DicomOverlay as DicomOverlayIcon,
@@ -263,8 +262,6 @@ const carbon = {
     GraphicalDataFlowIcon,
     // 项目
     DevicesIcon,
-    // 模板市场
-    StoreIcon,
     // 我的模板
     ObjectStorageIcon,
     // 键盘
