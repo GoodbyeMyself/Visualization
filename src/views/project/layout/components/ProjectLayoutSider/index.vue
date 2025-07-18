@@ -1,7 +1,6 @@
 <template>
     <n-layout-sider
         class="go-project-sider"
-        bordered
         collapse-mode="width"
         show-trigger="bar"
         :collapsed="collapsed"
@@ -14,8 +13,9 @@
         <div class="go-project-sider-flex">
             <aside>
                 <n-space vertical class="go-project-sider-top">
-                    <project-layout-create :collapsed="collapsed"></project-layout-create>
+                    <!-- 新建项目功能已移动到 project/items 页面 -->
                 </n-space>
+                <n-divider class="go-project-sider-divider"></n-divider>
                 <n-menu
                     :value="menuValue"
                     :options="menuOptions"
@@ -30,13 +30,13 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, toRefs } from 'vue'
-import { ProjectLayoutCreate } from '../ProjectLayoutCreate/index'
 import { asideWidth } from '@/settings/designSetting'
 import { useRoute } from 'vue-router'
 import { useSettingStore } from '@/store/modules/settingStore/settingStore'
 import { menuOptionsInit, expandedKeys } from './menu'
 
 const collapsed = ref<boolean>(false)
+
 const { getAsideCollapsedWidth } = toRefs(useSettingStore())
 
 const route = useRoute()
@@ -74,8 +74,7 @@ $siderHeight: 100vh;
             align-items: center;
             justify-content: space-between;
             flex-direction: column;
-            margin-top: 14px;
-            margin-bottom: 6px;
+            height: 52px;
         }
 
         &-flex {
@@ -83,6 +82,11 @@ $siderHeight: 100vh;
             flex-direction: column;
             justify-content: space-between;
             height: $siderHeight;
+        }
+
+        &-divider {
+            margin: 8px 16px;
+            opacity: 0.6;
         }
     }
 
