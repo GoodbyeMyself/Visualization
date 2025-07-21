@@ -6,10 +6,13 @@ import { EditCanvasTypeEnum } from '@/store/modules/chartEditStore/chartEditStor
 import { useSync } from '@/views/chart/hooks/useSync.hook'
 import { ChartEnum } from '@/enums/pageEnum'
 import { SavePageEnum } from '@/enums/editPageEnum'
+
 import { editToJsonInterval } from '@/settings/designSetting'
+
 import { goDialog } from '@/utils'
 
 const { updateComponent } = useSync()
+
 const chartEditStore = useChartEditStore()
 
 export const syncData = () => {
@@ -18,15 +21,23 @@ export const syncData = () => {
         isMaskClosable: true,
         transformOrigin: 'center',
         onPositiveCallback: () => {
+            // --
             window['$message'].success('正在同步编辑器...')
-            dispatchEvent(new CustomEvent(SavePageEnum.CHART, { detail: chartEditStore.getStorageInfo() }))
+            // --
+            dispatchEvent(new CustomEvent(SavePageEnum.CHART, {
+                detail: chartEditStore.getStorageInfo()
+            }))
+            // --
+            window['$message'].success('同步成功')
         }
     })
 }
 
 // 同步数据到预览页
 export const syncDataToPreview = () => {
-    dispatchEvent(new CustomEvent(SavePageEnum.CHART_TO_PREVIEW, { detail: chartEditStore.getStorageInfo() }))
+    dispatchEvent(new CustomEvent(SavePageEnum.CHART_TO_PREVIEW, {
+        detail: chartEditStore.getStorageInfo()
+    }))
 }
 
 // 侦听器更新

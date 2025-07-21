@@ -46,17 +46,24 @@ import { useChartEditStore } from '@/store/modules/chartEditStore/chartEditStore
 import { useChartHistoryStore } from '@/store/modules/chartHistoryStore/chartHistoryStore'
 
 const chartHistoryStoreStore = useChartHistoryStore()
+
 const chartEditStore = useChartEditStore()
 
 // 记录初始化
 chartHistoryStoreStore.canvasInit(chartEditStore.getEditCanvas)
 
 const HeaderLeftBtn = loadAsyncComponent(() => import('./ContentHeader/headerLeftBtn/index.vue'))
+
 const HeaderRightBtn = loadAsyncComponent(() => import('./ContentHeader/headerRightBtn/index.vue'))
+
 const HeaderTitle = loadAsyncComponent(() => import('./ContentHeader/headerTitle/index.vue'))
+
 const ContentLayers = loadAsyncComponent(() => import('./ContentLayers/index.vue'))
+
 const ContentCharts = loadAsyncComponent(() => import('./ContentCharts/index.vue'))
+
 const ContentConfigurations = loadAsyncComponent(() => import('./ContentConfigurations/index.vue'))
+
 const ContentLoad = loadAsyncComponent(() => import('./ContentLoad/index.vue'))
 
 // 右键

@@ -54,7 +54,9 @@ const previewHandle = () => {
             setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, sessionStorageInfo)
         }
     } else {
-        setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, [{ id: previewId, ...storageInfo }])
+        setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, [{
+            id: previewId, ...storageInfo
+        }])
     }
     // 跳转
     routerTurnByPath(path, [previewId], undefined, true)

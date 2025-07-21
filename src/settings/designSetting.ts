@@ -13,22 +13,22 @@ export const groupTitle = "分组"
 
 // 主题配置
 export const theme = {
-  // 默认是否开启深色主题
-  darkTheme: true,
-  //默认主题色
-  appTheme: '#51d6a9',
-  appThemeDetail: null,
+    // 默认是否开启深色主题
+    darkTheme: true,
+    //默认主题色
+    appTheme: '#51d6a9',
+    appThemeDetail: null,
 }
 
 // 图表初始配置(px)
 export const chartInitConfig = {
-  x: 50,
-  y: 50,
-  w: 500,
-  h: 300,
-  // 不建议动 offset
-  offsetX: 0,
-  offsetY: 0,
+    x: 50,
+    y: 50,
+    w: 500,
+    h: 300,
+    // 不建议动 offset
+    offsetX: 0,
+    offsetY: 0,
 }
 
 // dialog 图标的大小
