@@ -7,11 +7,11 @@ import { JSONStringify, JSONParse } from './utils'
  * @returns RemovableRef
  */
 export const setLocalStorage = <T>(k: string, v: T) => {
-  try {
-    window.localStorage.setItem(k, JSONStringify(v))
-  } catch (error) {
-    return false
-  }
+    try {
+        window.localStorage.setItem(k, JSONStringify(v))
+    } catch (error) {
+        return false
+    }
 }
 
 /**
@@ -20,12 +20,12 @@ export const setLocalStorage = <T>(k: string, v: T) => {
  * @returns any
  */
 export const getLocalStorage = (k: string) => {
-  const item = window.localStorage.getItem(k)
-  try {
-    return item ? JSONParse(item) : item
-  } catch (err) {
-    return item
-  }
+    const item = window.localStorage.getItem(k)
+    try {
+        return item ? JSONParse(item) : item
+    } catch (err) {
+        return item
+    }
 }
 
 /**
@@ -33,7 +33,7 @@ export const getLocalStorage = (k: string) => {
  * @param name
  */
 export const clearLocalStorage = (name: string) => {
-  window.localStorage.removeItem(name)
+    window.localStorage.removeItem(name)
 }
 
 /**
@@ -43,11 +43,11 @@ export const clearLocalStorage = (name: string) => {
  * @returns RemovableRef
  */
 export const setSessionStorage = <T>(k: string, v: T) => {
-  try {
-    window.sessionStorage.setItem(k, JSONStringify(v))
-  } catch (error) {
-    return false
-  }
+    try {
+        window.localStorage.setItem(k, JSONStringify(v))
+    } catch (error) {
+        return false
+    }
 }
 
 /**
@@ -55,12 +55,12 @@ export const setSessionStorage = <T>(k: string, v: T) => {
  * @returns any
  */
 export const getSessionStorage: (k: string) => any = (k: string) => {
-  const item = window.sessionStorage.getItem(k)
-  try {
-    return item ? JSONParse(item) : item
-  } catch (err) {
-    return item
-  }
+    const item = window.localStorage.getItem(k)
+    try {
+        return item ? JSONParse(item) : item
+    } catch (err) {
+        return item
+    }
 }
 
 /**
@@ -68,5 +68,5 @@ export const getSessionStorage: (k: string) => any = (k: string) => {
  * @param name
  */
 export const clearSessioStorage = (name: string) => {
-  window.sessionStorage.removeItem(name)
+    window.localStorage.removeItem(name)
 }
