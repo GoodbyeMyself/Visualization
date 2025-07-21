@@ -13,7 +13,12 @@
         <div class="go-project-sider-flex">
             <aside>
                 <n-space vertical class="go-project-sider-top">
-                    <!-- 新建项目功能已移动到 project/items 页面 -->
+                    <div class="logo-container" :class="{ 'collapsed': collapsed }">
+                        <img src="@/assets/logo.png" alt="Logo" class="logo-image" />
+                        <span class="project-name" v-show="!collapsed">
+                            Visualization
+                        </span>
+                    </div>
                 </n-space>
                 <n-divider class="go-project-sider-divider"></n-divider>
                 <n-menu
@@ -71,10 +76,43 @@ $siderHeight: 100vh;
 
         &-top {
             display: flex;
-            align-items: center;
             justify-content: space-between;
             flex-direction: column;
             height: 52px;
+            overflow: hidden;
+
+            .logo-container {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 20px 30px;
+                width: 100%;
+
+                .logo-image {
+                    width: 24px;
+                    height: 24px;
+                    object-fit: contain;
+                }
+
+                .project-name {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: var(--text-color);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                &.collapsed {
+                    justify-content: center;
+                    padding: 8px;
+                    
+                    .logo-image {
+                        width: 28px;
+                        height: 28px;
+                    }
+                }
+            }
         }
 
         &-flex {

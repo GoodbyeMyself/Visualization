@@ -31,7 +31,9 @@ import { useModalDataInit } from './hooks/useModal.hook'
 import { useDataListInit } from './hooks/useData.hook'
 
 const { CopyIcon, EllipsisHorizontalCircleSharpIcon } = icon.ionicons5
+
 const { list, deleteHandle } = useDataListInit()
+
 const { modalData, modalShow, closeModal, resizeHandle, editHandle } = useModalDataInit()
 </script>
 

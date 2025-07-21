@@ -1,41 +1,41 @@
 <template>
-  <!-- 工作台相关 -->
-  <div class="go-chart">
-    <n-layout>
-      <layout-header-pro>
-        <template #left>
-          <header-left-btn></header-left-btn>
-        </template>
-        <template #center>
-          <header-title></header-title>
-        </template>
-        <template #ri-left>
-          <header-right-btn></header-right-btn>
-        </template>
-      </layout-header-pro>
-      <n-layout-content content-style="overflow:hidden; display: flex">
-        <div style="overflow:hidden; display: flex">
-          <content-charts></content-charts>
-          <content-layers></content-layers>
-        </div>
-        <content-configurations></content-configurations>
-      </n-layout-content>
-    </n-layout>
-  </div>
-  <!-- 右键 -->
-  <n-dropdown
-    placement="bottom-start"
-    trigger="manual"
-    size="small"
-    :x="mousePosition.x"
-    :y="mousePosition.y"
-    :options="menuOptions"
-    :show="chartEditStore.getRightMenuShow"
-    :on-clickoutside="onClickOutSide"
-    @select="handleMenuSelect"
-  ></n-dropdown>
-  <!-- 加载蒙层 -->
-  <content-load></content-load>
+    <!-- 工作台相关 -->
+    <div class="go-chart">
+        <n-layout>
+            <layout-header-pro>
+                <template #left>
+                    <header-left-btn></header-left-btn>
+                </template>
+                <template #center>
+                    <header-title></header-title>
+                </template>
+                <template #ri-left>
+                    <header-right-btn></header-right-btn>
+                </template>
+            </layout-header-pro>
+            <n-layout-content content-style="overflow:hidden; display: flex">
+                <div style="overflow: hidden; display: flex">
+                    <content-charts></content-charts>
+                    <content-layers></content-layers>
+                </div>
+                <content-configurations></content-configurations>
+            </n-layout-content>
+        </n-layout>
+    </div>
+    <!-- 右键 -->
+    <n-dropdown
+        placement="bottom-start"
+        trigger="manual"
+        size="small"
+        :x="mousePosition.x"
+        :y="mousePosition.y"
+        :options="menuOptions"
+        :show="chartEditStore.getRightMenuShow"
+        :on-clickoutside="onClickOutSide"
+        @select="handleMenuSelect"
+    ></n-dropdown>
+    <!-- 加载蒙层 -->
+    <content-load></content-load>
 </template>
 
 <script setup lang="ts">
@@ -60,19 +60,14 @@ const ContentConfigurations = loadAsyncComponent(() => import('./ContentConfigur
 const ContentLoad = loadAsyncComponent(() => import('./ContentLoad/index.vue'))
 
 // 右键
-const {
-  menuOptions,
-  onClickOutSide,
-  mousePosition,
-  handleMenuSelect
-} = useContextMenu()
+const { menuOptions, onClickOutSide, mousePosition, handleMenuSelect } = useContextMenu()
 </script>
 
 <style lang="scss" scoped>
-@include go("chart") {
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  @include background-image("background-image");
+@include go('chart') {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    @include background-image('background-image');
 }
 </style>
