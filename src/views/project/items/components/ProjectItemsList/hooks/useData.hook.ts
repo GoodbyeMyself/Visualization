@@ -1,7 +1,8 @@
 import { ref } from 'vue'
-import { goDialog } from '@/utils'
+import { fetchPathByName, goDialog, routerTurnByPath } from '@/utils'
 import { DialogEnum } from '@/enums/pluginEnum'
 import { ChartList } from '../../..'
+import { PreviewEnum } from '@/enums/pageEnum'
 
 // 本地存储键名
 const LOCAL_STORAGE_KEY = 'GO_CHART_CARD_LIST'
@@ -135,6 +136,22 @@ export const useDataListInit = () => {
         })
     }
 
+    // 预览
+    const previewHandle = (cardData: any) => {
+        // 获取预览路径
+        const path = fetchPathByName(PreviewEnum.CHART_PREVIEW_NAME, 'href')
+        // 如果路径不存在
+        if (!path) return;
+
+        // 跳转
+        routerTurnByPath(path, [cardData.id], undefined, true)
+    }
+
+    // 发布/取消发布
+    const sendHandle = (cardData: any) => {
+        console.log(cardData, '<- 发布/取消发布');
+    }
+
     // 添加新项目
     const addNewProject = (newProject: any) => {
         list.value.push(newProject)
@@ -160,7 +177,9 @@ export const useDataListInit = () => {
         deleteHandle,
         addNewProject,
         updateProjectList,
-        refreshList
+        refreshList,
+        previewHandle,
+        sendHandle
     }
 }
 

@@ -9,6 +9,8 @@
                         @resize="resizeHandle"
                         @delete="deleteHandle($event, index)"
                         @edit="editHandle"
+                        @preview="previewHandle"
+                        @send="sendHandle"
                     ></project-items-card>
                 </n-grid-item>
             </n-grid>
@@ -57,7 +59,7 @@ import { generateProjectName } from './hooks/useData.hook'
 
 const { CopyIcon, EllipsisHorizontalCircleSharpIcon, FolderOpenIcon } = icon.ionicons5
 
-const { list, deleteHandle, updateProjectList, refreshList } = useDataListInit()
+const { list, deleteHandle, updateProjectList, refreshList, previewHandle, sendHandle } = useDataListInit()
 
 const { modalData, modalShow, closeModal, resizeHandle, editHandle } = useModalDataInit()
 

@@ -1,29 +1,29 @@
 <template>
-  <div :class="`go-preview ${chartEditStore.editCanvasConfig.previewScaleType}`" @mousedown="dragCanvas">
-    <template v-if="showEntity">
-      <!-- 实体区域 -->
-      <div ref="entityRef" class="go-preview-entity">
-        <!-- 缩放层 -->
-        <div ref="previewRef" class="go-preview-scale">
-          <!-- 展示层 -->
-          <div :style="previewRefStyle" v-if="show">
-            <!-- 渲染层 -->
-            <preview-render-list></preview-render-list>
-          </div>
-        </div>
-      </div>
-    </template>
-    <template v-else>
-      <!-- 缩放层 -->
-      <div ref="previewRef" class="go-preview-scale">
-        <!-- 展示层 -->
-        <div :style="previewRefStyle" v-if="show">
-          <!-- 渲染层 -->
-          <preview-render-list></preview-render-list>
-        </div>
-      </div>
-    </template>
-  </div>
+    <div :class="`go-preview ${chartEditStore.editCanvasConfig.previewScaleType}`" @mousedown="dragCanvas">
+        <template v-if="showEntity">
+            <!-- 实体区域 -->
+            <div ref="entityRef" class="go-preview-entity">
+                <!-- 缩放层 -->
+                <div ref="previewRef" class="go-preview-scale">
+                    <!-- 展示层 -->
+                    <div :style="previewRefStyle" v-if="show">
+                        <!-- 渲染层 -->
+                        <preview-render-list></preview-render-list>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template v-else>
+            <!-- 缩放层 -->
+            <div ref="previewRef" class="go-preview-scale">
+                <!-- 展示层 -->
+                <div :style="previewRefStyle" v-if="show">
+                    <!-- 渲染层 -->
+                    <preview-render-list></preview-render-list>
+                </div>
+            </div>
+        </template>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -42,21 +42,22 @@ import { useInitVChartsTheme } from '@/hooks'
 // const localStorageInfo: ChartEditStorageType = getSessionStorageInfo() as ChartEditStorageType
 
 await getSessionStorageInfo()
+
 const chartEditStore = useChartEditStore() as unknown as ChartEditStorageType
 
-setTitle(`预览-${chartEditStore.editCanvasConfig.projectName}`)
+setTitle(`预览-${chartEditStore.editCanvasConfig.projectName || '暂无数据'}`)
 
 const previewRefStyle = computed(() => {
-  return {
-    overflow: 'hidden',
-    ...getEditCanvasConfigStyle(chartEditStore.editCanvasConfig),
-    ...getFilterStyle(chartEditStore.editCanvasConfig)
-  }
+    return {
+        overflow: 'hidden',
+        ...getEditCanvasConfigStyle(chartEditStore.editCanvasConfig),
+        ...getFilterStyle(chartEditStore.editCanvasConfig)
+    }
 })
 
 const showEntity = computed(() => {
-  const type = chartEditStore.editCanvasConfig.previewScaleType
-  return type === PreviewScaleEnum.SCROLL_Y || type === PreviewScaleEnum.SCROLL_X
+    const type = chartEditStore.editCanvasConfig.previewScaleType
+    return type === PreviewScaleEnum.SCROLL_Y || type === PreviewScaleEnum.SCROLL_X
 })
 
 useStore(chartEditStore)
@@ -72,34 +73,34 @@ useInitVChartsTheme(chartEditStore)
 
 <style lang="scss" scoped>
 @include go('preview') {
-  position: relative;
-  height: 100vh;
-  width: 100vw;
-  @include background-image('background-image');
-  &.fit,
-  &.full {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    .go-preview-scale {
-      transform-origin: center center;
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    @include background-image('background-image');
+    &.fit,
+    &.full {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        .go-preview-scale {
+            transform-origin: center center;
+        }
     }
-  }
-  &.scrollY {
-    overflow-x: hidden;
-    .go-preview-scale {
-      transform-origin: left top;
+    &.scrollY {
+        overflow-x: hidden;
+        .go-preview-scale {
+            transform-origin: left top;
+        }
     }
-  }
-  &.scrollX {
-    overflow-y: hidden;
-    .go-preview-scale {
-      transform-origin: left top;
+    &.scrollX {
+        overflow-y: hidden;
+        .go-preview-scale {
+            transform-origin: left top;
+        }
     }
-  }
-  .go-preview-entity {
-    overflow: hidden;
-  }
+    .go-preview-entity {
+        overflow: hidden;
+    }
 }
 </style>

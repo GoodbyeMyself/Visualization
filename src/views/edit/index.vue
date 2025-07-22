@@ -128,6 +128,7 @@ async function updateSync() {
                 delete detail.id
                 // 保持id不变
                 window.opener.dispatchEvent(new CustomEvent(SavePageEnum.JSON, { detail }))
+                // --
                 window['$message'].success('正在同步内容...')
             } catch (e) {
                 window['$message'].error('内容格式有误')

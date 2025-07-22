@@ -95,7 +95,7 @@ const {
     SendIcon
 } = icon.ionicons5
 
-const emit = defineEmits(['delete', 'resize', 'edit'])
+const emit = defineEmits(['delete', 'resize', 'edit', 'preview', 'send'])
 
 const props = defineProps({
     cardData: Object as PropType<Chartype>
@@ -145,17 +145,33 @@ const handleSelect = (key: string) => {
         case 'edit':
             editHandle()
             break
+        case 'preview':
+            previewHandle()
+            break
+        case 'send':
+            sendHandle()
+            break
     }
-}
-
-// 删除处理
-const deleteHanlde = () => {
-    emit('delete', props.cardData)
 }
 
 // 编辑处理
 const editHandle = () => {
     emit('edit', props.cardData)
+}
+
+// 预览处理
+const previewHandle = () => {
+    emit('preview', props.cardData)
+}
+
+// 发布/取消发布处理
+const sendHandle = () => {
+    emit('send', props.cardData)
+}
+
+// 删除处理
+const deleteHanlde = () => {
+    emit('delete', props.cardData)
 }
 
 // 放大处理
