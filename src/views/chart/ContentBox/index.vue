@@ -149,7 +149,7 @@ $topOrBottomHeight: 40px;
     justify-content: space-between;
     flex-wrap: nowrap;
     align-items: center;
-    height: $topOrBottomHeight;
+    height: 36px;
     padding: 0 10px;
     border-top: 1px solid;
     @include fetch-border-color('hover-border-color');
