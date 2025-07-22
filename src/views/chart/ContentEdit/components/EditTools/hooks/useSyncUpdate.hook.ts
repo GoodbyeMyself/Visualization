@@ -16,52 +16,47 @@ const { updateComponent } = useSync()
 
 const chartEditStore = useChartEditStore()
 
-export const syncData = () => {
-    goDialog({
-        message: '是否覆盖源视图内容，此操作不可撤回?',
-        isMaskClosable: true,
-        transformOrigin: 'center',
-        onPositiveCallback: () => {
-            // 获取 路由 id
-            const id = fetchRouteParamsLocation();
+export const syncData = (hasMessage: boolean = true) => {
+    // 获取 路由 id
+    const id = fetchRouteParamsLocation();
 
-            const storageInfo = chartEditStore.getStorageInfo()
+    const storageInfo = chartEditStore.getStorageInfo()
 
-            const sessionStorageInfo = getSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST) || [];
+    const sessionStorageInfo = getSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST) || [];
 
-            if (sessionStorageInfo?.length) {
-                // 查询 是否存在索引
-                const repeateIndex = sessionStorageInfo.findIndex((e: { id: string }) => e.id === id)
-                // 重复替换
-                if (repeateIndex !== -1) {
-                    sessionStorageInfo.splice(repeateIndex, 1, {
-                        id: id,
-                        ...storageInfo
-                    })
-                    setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, sessionStorageInfo)
-                } else {
-                    sessionStorageInfo.push({
-                        id: id,
-                        ...storageInfo
-                    })
-                    setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, sessionStorageInfo)
-                }
-            } else {
-                setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, [{
-                    id: id,
-                    ...storageInfo
-                }])
-            }
-
-            // --
-            // dispatchEvent(new CustomEvent(SavePageEnum.CHART, {
-            //     detail: chartEditStore.getStorageInfo()
-            // }))
-
-            // --
-            window['$message'].success('保存成功')
+    if (sessionStorageInfo?.length) {
+        // 查询 是否存在索引
+        const repeateIndex = sessionStorageInfo.findIndex((e: { id: string }) => e.id === id)
+        // 重复替换
+        if (repeateIndex !== -1) {
+            sessionStorageInfo.splice(repeateIndex, 1, {
+                id: id,
+                ...storageInfo
+            })
+            setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, sessionStorageInfo)
+        } else {
+            sessionStorageInfo.push({
+                id: id,
+                ...storageInfo
+            })
+            setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, sessionStorageInfo)
         }
-    })
+    } else {
+        setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, [{
+            id: id,
+            ...storageInfo
+        }])
+    }
+
+    // --
+    // dispatchEvent(new CustomEvent(SavePageEnum.CHART, {
+    //     detail: chartEditStore.getStorageInfo()
+    // }))
+
+    // --
+    if (hasMessage) {
+        window['$message'].success('保存成功')
+    }
 }
 
 // 同步数据到预览页
@@ -89,11 +84,11 @@ const useSyncUpdateHandle = () => {
 
     // 开启侦听
     const use = () => {
-        // 定时同步数据（暂不开启）
-        // timer = setInterval(() => {
-        //   // 窗口激活并且处于工作台
-        //   document.hasFocus() && syncData()
-        // }, editToJsonInterval)
+        // 定时同步数据
+        timer = setInterval(() => {
+            // 窗口激活并且处于工作台
+            document.hasFocus() && syncData(false);
+        }, editToJsonInterval)
 
         // 失焦同步数据
         addEventListener('blur', syncDataToPreview)

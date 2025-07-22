@@ -121,7 +121,6 @@ watch(
     () => comTitle.value,
     newTitle => {
         if (newTitle && newTitle !== '新项目 - 1') {
-            console.log(newTitle, '<- 打印 xxx');
             // 获取项目ID
             const projectId = fetchProhectInfoById();
             // 如果项目ID存在，则更新项目信息
