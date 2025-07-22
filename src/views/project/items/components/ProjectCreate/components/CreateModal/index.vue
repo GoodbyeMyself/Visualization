@@ -39,7 +39,7 @@ import { ref, watch, shallowRef } from 'vue'
 import { icon } from '@/plugins'
 import { PageEnum, ChartEnum } from '@/enums/pageEnum'
 import { fetchPathByName, routerTurnByPath, renderLang, getUUID } from '@/utils'
-import { getLocalStorageData, saveToLocalStorage } from '@/views/project/items/components/ProjectItemsList/hooks/useData.hook'
+import { getLocalStorageData, saveToLocalStorage, generateProjectName } from '@/views/project/items/components/ProjectItemsList/hooks/useData.hook'
 
 const { FishIcon, CloseIcon } = icon.ionicons5
 const { ObjectStorageIcon } = icon.carbon
@@ -80,16 +80,18 @@ const btnHandle = (key: string) => {
     const id = getUUID()
     const path = fetchPathByName(ChartEnum.CHART_HOME_NAME, 'href')
     
+    // 获取当前项目列表
+    const currentList = getLocalStorageData()
+    
     // 创建新项目并添加到列表
     const newProject = {
         id: id,
-        title: '新项目',
+        title: generateProjectName(currentList),
         release: false,
         label: '我的项目'
     }
     
-    // 获取当前项目列表并添加新项目
-    const currentList = getLocalStorageData()
+    // 添加新项目到列表
     currentList.unshift(newProject)
     saveToLocalStorage(currentList)
     

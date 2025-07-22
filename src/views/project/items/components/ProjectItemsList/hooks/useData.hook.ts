@@ -6,6 +6,37 @@ import { ChartList } from '../../..'
 // 本地存储键名
 const LOCAL_STORAGE_KEY = 'GO_CHART_CARD_LIST'
 
+// 生成项目名称的工具函数
+const generateProjectName = (existingProjects: ChartList): string => {
+    const baseName = '新项目'
+    const pattern = new RegExp(`^${baseName}\\s*-\\s*(\\d+)$`)
+    
+    // 提取所有已存在的数字
+    const existingNumbers = existingProjects
+        .map(project => {
+            const match = project.title.match(pattern)
+            return match ? parseInt(match[1]) : null
+        })
+        .filter(num => num !== null)
+        .sort((a, b) => a! - b!)
+    
+    // 如果没有匹配的项目，返回 "新项目 - 1"
+    if (existingNumbers.length === 0) {
+        return `${baseName} - 1`
+    }
+    
+    // 找到第一个缺失的数字
+    let missingNumber = 1
+    for (const num of existingNumbers) {
+        if (num !== missingNumber) {
+            break
+        }
+        missingNumber++
+    }
+    
+    return `${baseName} - ${missingNumber}`
+}
+
 // 获取本地缓存数据
 const getLocalStorageData = (): ChartList => {
     try {
@@ -29,13 +60,25 @@ const saveToLocalStorage = (data: ChartList) => {
 // 更新项目信息
 const updateProjectInfo = (projectId: string | number, updates: Partial<any>) => {
     try {
-        const data = localStorage.getItem(LOCAL_STORAGE_KEY)
+        const data = localStorage.getItem(LOCAL_STORAGE_KEY);
+        // 如果数据存在
         if (data) {
+            // 解析数据
             const projectList = JSON.parse(data)
-            const projectIndex = projectList.findIndex((item: any) => item.id === projectId)
-            
+            // 找到项目索引
+            const projectIndex = projectList.findIndex((item: any) => item.id === projectId);
+
+            // 如果项目索引存在
             if (projectIndex !== -1) {
-                projectList[projectIndex] = { ...projectList[projectIndex], ...updates }
+                // 
+                console.log(projectList[projectIndex], '<- 打印 xxx', updates);
+
+                // 更新项目信息
+                projectList[projectIndex] = {
+                    ...projectList[projectIndex],
+                    ...updates
+                }
+                // 保存到本地缓存
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(projectList))
                 return true
             }
@@ -139,5 +182,6 @@ export {
     saveToLocalStorage,
     updateProjectInfo,
     deleteProjectFromStorage,
-    LOCAL_STORAGE_KEY
+    LOCAL_STORAGE_KEY,
+    generateProjectName
 }

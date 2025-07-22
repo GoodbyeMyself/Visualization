@@ -53,6 +53,7 @@ import { useModalDataInit } from './hooks/useModal.hook'
 import { useDataListInit } from './hooks/useData.hook'
 import { SavePageEnum } from '@/enums/editPageEnum'
 import { useRoute } from 'vue-router'
+import { generateProjectName } from './hooks/useData.hook'
 
 const { CopyIcon, EllipsisHorizontalCircleSharpIcon, FolderOpenIcon } = icon.ionicons5
 
@@ -76,10 +77,19 @@ const handleProjectSave = (event: any) => {
         const projectIndex = currentList.findIndex(item => item.id === projectId)
         
         if (projectIndex !== -1) {
+            let projectTitle = projectData.editCanvasConfig?.projectName || '新项目 - 1'
+            
+            // 如果项目名称是"新项目 - 1"，则生成新的项目名称
+            if (projectTitle === '新项目 - 1') {
+                // 临时移除当前项目，以便生成正确的名称
+                const tempList = currentList.filter(item => item.id !== projectId)
+                projectTitle = generateProjectName(tempList)
+            }
+            
             // 更新项目信息
             currentList[projectIndex] = {
                 ...currentList[projectIndex],
-                title: projectData.editCanvasConfig?.projectName || '新项目',
+                title: projectTitle,
                 release: false, // 可以根据需要设置发布状态
                 label: '我的项目'
             }
