@@ -36,6 +36,14 @@ const settingStore = useSettingStore()
 export const useChartEditStore = defineStore({
     id: 'useChartEditStore',
     state: (): ChartEditStoreType => ({
+        // 项目数据
+        projectInfo: {
+            projectId: '',
+            projectName: '',
+            remarks: '',
+            thumbnail: '',
+            release: false
+        },
         // 画布属性
         editCanvas: {
             // 编辑区域 Dom
@@ -202,6 +210,10 @@ export const useChartEditStore = defineStore({
         // * 设置 editCanvasConfig（需保存后端） 数据项
         setEditCanvasConfig<T extends keyof EditCanvasConfigType, K extends EditCanvasConfigType[T]>(key: T, value: K) {
             this.editCanvasConfig[key] = value
+        },
+        // * 设置 peojectInfo 数据项
+        setProjectInfo<T extends keyof ProjectInfoType, K extends ProjectInfoType[T]>(key: T, value: K) {
+            this.projectInfo[key] = value
         },
         // * 设置右键菜单
         setRightMenuShow(value: boolean) {
