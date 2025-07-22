@@ -1,5 +1,7 @@
 import { CreateComponentType, CreateComponentGroupType, FilterEnum } from '@/packages/index.d'
+
 import { HistoryActionTypeEnum } from '@/store/modules/chartHistoryStore/chartHistoryStore.d'
+
 import {
     RequestHttpEnum,
     RequestContentTypeEnum,
@@ -9,8 +11,12 @@ import {
     RequestBodyEnum,
     RequestParamsObjType
 } from '@/enums/httpEnum'
+
 import { PreviewScaleEnum } from '@/enums/styleEnum'
+
 import type { ChartColorsNameType, CustomColorsType, GlobalThemeJsonType } from '@/settings/chartThemes/index'
+
+import { SyncEnum } from '@/enums/editPageEnum'
 
 // 项目数据枚举
 export enum ProjectInfoEnum {
@@ -44,10 +50,11 @@ export enum EditCanvasTypeEnum {
     SCALE = 'scale',
     USER_SCALE = 'userScale',
     LOCK_SCALE = 'lockScale',
+    SAVE_STATUS = 'saveStatus',
     IS_CREATE = 'isCreate',
     IS_DRAG = 'isDrag',
     IS_SELECT = 'isSelect',
-    IS_CODE_EDIT = "isCodeEdit"
+    IS_CODE_EDIT="isCodeEdit"
 }
 
 // 编辑区域
@@ -71,6 +78,8 @@ export type EditCanvasType = {
     [EditCanvasTypeEnum.IS_SELECT]: boolean
     // 代码编辑中
     [EditCanvasTypeEnum.IS_CODE_EDIT]: boolean
+    // 保存状态
+    [EditCanvasTypeEnum.SAVE_STATUS]: SyncEnum
 }
 
 // 滤镜/背景色/宽高主题等
@@ -167,6 +176,7 @@ export type RecordChartType = {
 
 // Store 枚举
 export enum ChartEditStoreEnum {
+    PROJECT_INFO = 'projectInfo',
     EDIT_RANGE = 'editRange',
     EDIT_CANVAS = 'editCanvas',
     RIGHT_MENU_SHOW = 'rightMenuShow',

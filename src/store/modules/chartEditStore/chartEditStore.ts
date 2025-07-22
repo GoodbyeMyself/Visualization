@@ -26,7 +26,8 @@ import {
     TargetChartType,
     RecordChartType,
     RequestGlobalConfigType,
-    EditCanvasConfigType
+    EditCanvasConfigType,
+    ProjectInfoType
 } from './chartEditStore.d'
 
 const chartHistoryStore = useChartHistoryStore()
@@ -64,7 +65,9 @@ export const useChartEditStore = defineStore({
             // 框选中
             isSelect: false,
             // 代码编辑中
-            isCodeEdit: false
+            isCodeEdit: false,
+            // 保存状态
+            saveStatus: ''
         },
         // 右键菜单
         rightMenuShow: false,
@@ -148,6 +151,10 @@ export const useChartEditStore = defineStore({
         componentList: []
     }),
     getters: {
+        // * 获取项目数据
+        getProjectInfo(): ProjectInfoType {
+            return this.projectInfo
+        },
         getMousePosition(): MousePositionType {
             return this.mousePosition
         },
