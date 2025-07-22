@@ -84,3 +84,15 @@ export enum MacKeyboard {
     ALT_SOURCE_KEY = '⌥',
     SPACE = 'Space'
 }
+
+// 同步状态枚举
+export enum SyncEnum {
+    // 等待
+    PENDING,
+    // 开始
+    START,
+    // 成功
+    SUCCESS,
+    // 失败
+    FAILURE
+}
