@@ -64,8 +64,6 @@ import { ProjectInfoEnum } from '@/store/modules/chartEditStore/chartEditStore.d
 import { useRoute } from 'vue-router'
 // 状态
 import { useChartEditStore } from '@/store/modules/chartEditStore/chartEditStore'
-// 工具
-import { syncData } from '../../ContentEdit/components/EditTools/hooks/useSyncUpdate.hook'
 import { icon } from '@/plugins'
 import { cloneDeep } from 'lodash'
 import { useClipboard } from '@vueuse/core'
@@ -163,13 +161,6 @@ const sendHandle = async () => {
 }
 
 const btnList = [
-    {
-        select: true,
-        title: '保存',
-        type: 'primary',
-        icon: renderIcon(AnalyticsIcon),
-        event: syncData
-    },
     {
         select: true,
         title: '预览',

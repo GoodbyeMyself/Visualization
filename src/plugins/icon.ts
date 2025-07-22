@@ -103,7 +103,8 @@ import {
     FilterEdit as FilterEditIcon,
     Laptop as LaptopIcon,
     ChartPie as ChartPieIcon,
-    Edit as EditIcon
+    Edit as EditIcon,
+    Save as SaveIcon
 } from '@vicons/carbon'
 
 const ionicons5 = {
@@ -303,7 +304,9 @@ const carbon = {
     // 柱状图
     ChartPieIcon,
     // 编辑
-    EditIcon
+    EditIcon,
+    // 保存
+    SaveIcon
 }
 
 // https://www.xicons.org/#/ 还有很多

@@ -41,6 +41,24 @@
                 </template>
                 <span>{{ item.title }}</span>
             </n-tooltip>
+
+            <n-divider vertical />
+
+            <!-- 保存 -->
+            <n-tooltip placement="bottom" trigger="hover">
+                <template #trigger>
+                    <div class="save-btn" >
+                        <n-button size="small" type="primary" ghost @click="syncData()">
+                            <template #icon>
+                                <n-icon>
+                                    <SaveIcon></SaveIcon>
+                                </n-icon>
+                            </template>
+                        </n-button>
+                    </div>
+                </template>
+                <span>保存</span>
+            </n-tooltip>
         </n-space>
     </n-space>
 </template>
@@ -58,12 +76,24 @@ import { HistoryStackEnum } from '@/store/modules/chartHistoryStore/chartHistory
 
 import { useChartLayoutStore } from '@/store/modules/chartLayoutStore/chartLayoutStore'
 import { ChartLayoutStoreEnum } from '@/store/modules/chartLayoutStore/chartLayoutStore.d'
+// 带接口的保存
+import { useSync } from '../../hooks/useSync.hook'
+// 本地缓存
+import { syncData } from '../../ContentEdit/components/EditTools/hooks/useSyncUpdate.hook'
 
 const { LayersIcon, BarChartIcon, PrismIcon, HomeIcon, ArrowBackIcon, ArrowForwardIcon } = icon.ionicons5
+const { SaveIcon } = icon.carbon
+
 const { setItem } = useChartLayoutStore()
+
 const { getLayers, getCharts, getDetails } = toRefs(useChartLayoutStore())
+
 const chartEditStore = useChartEditStore()
+
 const chartHistoryStore = useChartHistoryStore()
+
+// 带接口的保存
+const { dataSyncUpdate } = useSync()
 
 interface ItemType<T> {
     key: T
