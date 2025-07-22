@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import { OUTPUT_DIR, brotliSize, chunkSizeWarningLimit, terserOptions, rollupOptions } from './build/constant'
@@ -6,16 +6,31 @@ import viteCompression from 'vite-plugin-compression'
 import { viteMockServe } from 'vite-plugin-mock'
 import monacoEditorPlugin from 'vite-plugin-monaco-editor'
 
+import { axiosPre } from './src/settings/httpSetting'
+
 function pathResolve(dir: string) {
     return resolve(process.cwd(), '.', dir)
 }
 
-export default defineConfig({
+export default ({ mode }) => defineConfig({
     base: '/',
     // 修改端口
     server: {
+        host: true,
         port: 3020,
         open: true,
+        proxy: {
+            [axiosPre]: {
+                // @ts-ignore
+                target: loadEnv(mode, process.cwd()).VITE_DEV_PATH,
+                changeOrigin: true,
+                ws: true,
+                secure: true,
+            }
+        },
+        hmr: {
+            overlay: false,
+        }
     },
     // 路径重定向
     resolve: {
