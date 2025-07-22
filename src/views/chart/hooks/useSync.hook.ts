@@ -1,8 +1,9 @@
-import { getUUID } from '@/utils'
+import html2canvas from 'html2canvas'
 import { useChartEditStore } from '@/store/modules/chartEditStore/chartEditStore'
-import { ChartEditStoreEnum, ChartEditStorage, ProjectInfoEnum } from '@/store/modules/chartEditStore/chartEditStore.d'
+import { EditCanvasTypeEnum,ChartEditStoreEnum, ChartEditStorage, ProjectInfoEnum } from '@/store/modules/chartEditStore/chartEditStore.d'
 import { useChartHistoryStore } from '@/store/modules/chartHistoryStore/chartHistoryStore'
 import { useChartLayoutStore } from '@/store/modules/chartLayoutStore/chartLayoutStore'
+import { useSystemStore } from '@/store/modules/systemStore/systemStore'
 import { ChartLayoutStoreEnum } from '@/store/modules/chartLayoutStore/chartLayoutStore.d'
 import { fetchChartComponent, fetchConfigComponent, createComponent } from '@/packages/index'
 import { CreateComponentType, CreateComponentGroupType } from '@/packages/index.d'
@@ -11,6 +12,14 @@ import { PublicGroupConfigClass } from '@/packages/public/publicConfig'
 import merge from 'lodash/merge'
 // 防抖
 import throttle from 'lodash/throttle'
+// utils
+import { getUUID, fetchRouteParamsLocation, base64toFile, JSONStringify } from '@/utils'
+// 画布枚举
+import { SyncEnum } from '@/enums/editPageEnum'
+// 接口
+import { uploadFile, updateProjectApi, saveProjectApi } from '@/api/path'
+// 接口状态
+import { ResultEnum } from '@/enums/httpEnum'
 
 /**
  * * 画布-版本升级对旧数据无法兼容的补丁
@@ -92,6 +101,8 @@ export const useSync = () => {
     const chartEditStore = useChartEditStore()
     const chartHistoryStore = useChartHistoryStore()
     const chartLayoutStore = useChartLayoutStore()
+
+    const systemStore = useSystemStore()
 
     /**
      * * 组件动态注册
@@ -234,9 +245,81 @@ export const useSync = () => {
         chartEditStore.setProjectInfo(ProjectInfoEnum.RELEASE, state === 1)
     }
 
-    // * 数据保存
-    const dataSyncUpdate = throttle(async (updateImg = true) => {
-        console.log(2222, '<- 打印 xxx');
+    /**
+     * @description: 数据保存： 1、上传缩略图功能完整，但是未对接后端， 暂时置为 false
+     * @author: M.yunlong
+     * @date: 2025-07-22 15:03:41
+    */
+    const dataSyncUpdate = throttle(async (updateImg = false) => {
+        // 获取 url 参数
+        if(!fetchRouteParamsLocation()) return;
+
+        let projectId = chartEditStore.getProjectInfo[ProjectInfoEnum.PROJECT_ID] || fetchRouteParamsLocation();
+
+        if(projectId === null || projectId === ''){
+            // 数据未初始化成功
+            window['$message'].error('数据初未始化成功,请刷新页面！')
+            return
+        }
+
+        chartEditStore.setEditCanvas(EditCanvasTypeEnum.SAVE_STATUS, SyncEnum.START)
+
+        // 异常处理：缩略图上传失败不影响 JSON 的保存
+        try {
+            if (updateImg) {
+                // 获取缩略图片
+                const range = document.querySelector('.go-edit-range') as HTMLElement
+                // 生成图片
+                const canvasImage: HTMLCanvasElement = await html2canvas(range, {
+                    backgroundColor: null,
+                    allowTaint: true,
+                    useCORS: true
+                })
+                // 上传预览图
+                let uploadParams = new FormData()
+
+                uploadParams.append('object', base64toFile(canvasImage.toDataURL(), `${fetchRouteParamsLocation()}_index_preview.png`))
+
+                const uploadRes = await uploadFile(uploadParams)
+
+                // 保存预览图
+                if(uploadRes && uploadRes.code === ResultEnum.SUCCESS) {
+                    if (uploadRes.data.fileurl) {
+                        await updateProjectApi({
+                            id: fetchRouteParamsLocation(),
+                            indexImage: `${uploadRes.data.fileurl}`
+                        })
+                    } else {
+                        await updateProjectApi({
+                            id: fetchRouteParamsLocation(),
+                            indexImage: `${systemStore.getFetchInfo.OSSUrl}${uploadRes.data.fileName}`
+                        })
+                    }
+                }
+            }
+        } catch (e) {
+            console.log(e)
+        }
+
+        // 保存数据
+        let params = new FormData()
+        params.append('projectId', projectId)
+        params.append('content', JSONStringify(chartEditStore.getStorageInfo() || {}))
+
+        console.log(chartEditStore.getStorageInfo(), '<- 保存的画布数据');
+
+        const res = await saveProjectApi(params)
+
+        if (res && res.code === ResultEnum.SUCCESS) {
+            // 成功状态
+            setTimeout(() => {
+                chartEditStore.setEditCanvas(EditCanvasTypeEnum.SAVE_STATUS, SyncEnum.SUCCESS)
+            }, 1000)
+            return
+        }
+        // 失败状态
+        chartEditStore.setEditCanvas(EditCanvasTypeEnum.SAVE_STATUS, SyncEnum.FAILURE)
+
     }, 3000)
 
     return {
