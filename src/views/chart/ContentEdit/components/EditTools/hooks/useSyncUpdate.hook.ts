@@ -7,9 +7,10 @@ import { useSync } from '@/views/chart/hooks/useSync.hook'
 import { ChartEnum } from '@/enums/pageEnum'
 import { SavePageEnum } from '@/enums/editPageEnum'
 
-import { editToJsonInterval } from '@/settings/designSetting'
+import { fetchRouteParamsLocation, getSessionStorage, setSessionStorage, goDialog } from '@/utils'
 
-import { goDialog } from '@/utils'
+import { editToJsonInterval } from '@/settings/designSetting'
+import { StorageEnum } from '@/enums/storageEnum'
 
 const { updateComponent } = useSync()
 
@@ -21,14 +22,44 @@ export const syncData = () => {
         isMaskClosable: true,
         transformOrigin: 'center',
         onPositiveCallback: () => {
+            // 获取 路由 id
+            const id = fetchRouteParamsLocation();
+
+            const storageInfo = chartEditStore.getStorageInfo()
+
+            const sessionStorageInfo = getSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST) || [];
+
+            if (sessionStorageInfo?.length) {
+                // 查询 是否存在索引
+                const repeateIndex = sessionStorageInfo.findIndex((e: { id: string }) => e.id === id)
+                // 重复替换
+                if (repeateIndex !== -1) {
+                    sessionStorageInfo.splice(repeateIndex, 1, {
+                        id: id,
+                        ...storageInfo
+                    })
+                    setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, sessionStorageInfo)
+                } else {
+                    sessionStorageInfo.push({
+                        id: id,
+                        ...storageInfo
+                    })
+                    setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, sessionStorageInfo)
+                }
+            } else {
+                setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, [{
+                    id: id,
+                    ...storageInfo
+                }])
+            }
+
             // --
-            window['$message'].success('正在同步编辑器...')
+            // dispatchEvent(new CustomEvent(SavePageEnum.CHART, {
+            //     detail: chartEditStore.getStorageInfo()
+            // }))
+
             // --
-            dispatchEvent(new CustomEvent(SavePageEnum.CHART, {
-                detail: chartEditStore.getStorageInfo()
-            }))
-            // --
-            window['$message'].success('同步成功')
+            window['$message'].success('保存成功')
         }
     })
 }

@@ -75,7 +75,7 @@ const sendHandle = () => {
 const btnList = [
     {
         select: true,
-        title: '同步内容',
+        title: '保存',
         type: 'primary',
         icon: renderIcon(AnalyticsIcon),
         event: syncData

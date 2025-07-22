@@ -70,9 +70,6 @@ const updateProjectInfo = (projectId: string | number, updates: Partial<any>) =>
 
             // 如果项目索引存在
             if (projectIndex !== -1) {
-                // 
-                console.log(projectList[projectIndex], '<- 打印 xxx', updates);
-
                 // 更新项目信息
                 projectList[projectIndex] = {
                     ...projectList[projectIndex],
@@ -99,10 +96,8 @@ const deleteProjectFromStorage = (projectId: string | number) => {
             const projectIndex = projectList.findIndex((item: any) => item.id === projectId)
             
             if (projectIndex !== -1) {
-                console.log('删除项目:', projectId, '索引:', projectIndex)
                 projectList.splice(projectIndex, 1)
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(projectList))
-                console.log('删除后项目列表长度:', projectList.length)
                 return true
             } else {
                 console.log('未找到要删除的项目:', projectId)
@@ -125,21 +120,17 @@ export const useDataListInit = () => {
 
     // 删除
     const deleteHandle = (cardData: any, index: number) => {
-        console.log('开始删除项目:', cardData, '索引:', index)
         goDialog({
             type: DialogEnum.DELETE,
             promise: true,
             onPositiveCallback: () =>
                 new Promise(res => setTimeout(() => res(1), 1000)),
             promiseResCallback: (e: any) => {
-                console.log('删除确认回调执行')
                 window.$message.success('删除成功')
                 // 从本地缓存中删除项目
                 const deleteResult = deleteProjectFromStorage(cardData.id)
-                console.log('删除结果:', deleteResult)
                 // 刷新列表以确保数据同步
                 refreshList()
-                console.log('列表刷新完成，当前列表长度:', list.value.length)
             }
         })
     }
@@ -160,11 +151,8 @@ export const useDataListInit = () => {
 
     // 刷新列表（从本地缓存重新加载）
     const refreshList = () => {
-        console.log('开始刷新列表')
         const cachedData = getLocalStorageData()
-        console.log('从缓存获取的数据:', cachedData)
         list.value = cachedData
-        console.log('列表刷新完成，当前列表长度:', list.value.length)
     }
 
     return {
