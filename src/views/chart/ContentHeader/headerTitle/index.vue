@@ -28,11 +28,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, computed } from 'vue'
+import { ref, nextTick, computed, watch } from 'vue'
 import { fetchRouteParamsLocation, setTitle } from '@/utils'
 import { useChartEditStore } from '@/store/modules/chartEditStore/chartEditStore'
 import { EditCanvasConfigEnum } from '@/store/modules/chartEditStore/chartEditStore.d'
 import { icon } from '@/plugins'
+import { updateProjectInfo } from '@/views/project/items/components/ProjectItemsList/hooks/useData.hook'
 
 const { FishIcon } = icon.ionicons5
 const chartEditStore = useChartEditStore()
@@ -60,6 +61,14 @@ const comTitle = computed(() => {
   return newTitle
 })
 
+// 监听项目名称变化
+watch(() => comTitle.value, (newTitle) => {
+  if (newTitle && newTitle !== '新项目') {
+    const projectId = fetchProhectInfoById()
+    updateProjectInfo(projectId, { title: newTitle })
+  }
+})
+
 const handleFocus = () => {
   focus.value = true
   nextTick(() => {
@@ -69,6 +78,11 @@ const handleFocus = () => {
 
 const handleBlur = () => {
   focus.value = false
+  // 在失焦时也更新本地缓存
+  if (title.value && title.value.trim()) {
+    const projectId = fetchProhectInfoById()
+    updateProjectInfo(projectId, { title: title.value.trim() })
+  }
 }
 </script>
 <style lang="scss" scoped>
