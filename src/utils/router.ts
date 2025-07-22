@@ -1,6 +1,6 @@
 import { useRoute } from 'vue-router'
 import { ResultEnum } from '@/enums/httpEnum'
-import { ErrorPageNameMap, PageEnum } from '@/enums/pageEnum'
+import { ErrorPageNameMap, PageEnum, PreviewEnum } from '@/enums/pageEnum'
 import { docPath, giteeSourceCodePath } from '@/settings/pathConst'
 import { cryptoDecode } from './crypto'
 import { StorageEnum } from '@/enums/storageEnum'
@@ -14,24 +14,24 @@ import router from '@/router'
  * @param windowOpen
  */
 export const routerTurnByName = (
-  pageName: string,
-  isReplace?: boolean,
-  windowOpen?: boolean
+    pageName: string,
+    isReplace?: boolean,
+    windowOpen?: boolean
 ) => {
-  if (windowOpen) {
-    const path = fetchPathByName(pageName, 'href')
-    openNewWindow(path)
-    return
-  }
-  if (isReplace) {
-    router.replace({
-      name: pageName,
+    if (windowOpen) {
+        const path = fetchPathByName(pageName, 'href')
+        openNewWindow(path)
+        return
+    }
+    if (isReplace) {
+        router.replace({
+            name: pageName,
+        })
+        return
+    }
+    router.push({
+        name: pageName,
     })
-    return
-  }
-  router.push({
-    name: pageName,
-  })
 }
 
 /**
@@ -40,14 +40,14 @@ export const routerTurnByName = (
  * @param pageName
  */
 export const fetchPathByName = (pageName: string, p?: string) => {
-  try {
-    const pathData = router.resolve({
-      name: pageName,
-    })
-    return p ? (pathData as any)[p] : pathData
-  } catch (error) {
-    window['$message'].warning('查询路由信息失败，请联系管理员！')
-  }
+    try {
+        const pathData = router.resolve({
+            name: pageName,
+        })
+        return p ? (pathData as any)[p] : pathData
+    } catch (error) {
+        window['$message'].warning('查询路由信息失败，请联系管理员！')
+    }
 }
 
 /**
@@ -58,27 +58,27 @@ export const fetchPathByName = (pageName: string, p?: string) => {
  * @param windowOpen
  */
 export const routerTurnByPath = (
-  path: string,
-  query?: Array<string | number>,
-  isReplace?: boolean,
-  windowOpen?: boolean
+    path: string,
+    query?: Array<string | number>,
+    isReplace?: boolean,
+    windowOpen?: boolean
 ) => {
-  let fullPath = ''
-  if (query?.length) {
-    fullPath = `${path}/${query.join('/')}`
-  }
-  if (windowOpen) {
-    return openNewWindow(fullPath)
-  }
-  if (isReplace) {
-    router.replace({
-      path: fullPath,
+    let fullPath = ''
+    if (query?.length) {
+        fullPath = `${path}/${query.join('/')}`
+    }
+    if (windowOpen) {
+        return openNewWindow(fullPath)
+    }
+    if (isReplace) {
+        router.replace({
+            path: fullPath,
+        })
+        return
+    }
+    router.push({
+        path: fullPath,
     })
-    return
-  }
-  router.push({
-    path: fullPath,
-  })
 }
 
 /**
@@ -87,25 +87,25 @@ export const routerTurnByPath = (
  * @returns
  */
 export const redirectErrorPage = (code: ResultEnum) => {
-  if (!code) return false
-  const pageName = ErrorPageNameMap.get(code)
-  if (!pageName) return false
-  routerTurnByName(pageName)
+    if (!code) return false
+    const pageName = ErrorPageNameMap.get(code)
+    if (!pageName) return false
+    routerTurnByName(pageName)
 }
 
 /**
  * * 重新加载当前路由页面
  */
 export const reloadRoutePage = () => {
-  routerTurnByName(PageEnum.RELOAD_NAME)
+    routerTurnByName(PageEnum.RELOAD_NAME)
 }
 
 /**
  * * 退出
  */
 export const logout = () => {
-  clearLocalStorage(StorageEnum.GO_LOGIN_INFO_STORE)
-  routerTurnByName(PageEnum.BASE_LOGIN_NAME)
+    clearLocalStorage(StorageEnum.GO_LOGIN_INFO_STORE)
+    routerTurnByName(PageEnum.BASE_LOGIN_NAME)
 }
 
 /**
@@ -113,7 +113,7 @@ export const logout = () => {
  * @param url
  */
 export const openNewWindow = (url: string) => {
-  return window.open(url, '_blank')
+    return window.open(url, '_blank')
 }
 
 /**
@@ -121,7 +121,7 @@ export const openNewWindow = (url: string) => {
  * @param url
  */
 export const openDoc = () => {
-  openNewWindow(docPath)
+    openNewWindow(docPath)
 }
 
 /**
@@ -129,7 +129,7 @@ export const openDoc = () => {
  * @param url
  */
 export const openGiteeSourceCode = () => {
-  openNewWindow(giteeSourceCodePath)
+    openNewWindow(giteeSourceCodePath)
 }
 
 /**
@@ -137,7 +137,7 @@ export const openGiteeSourceCode = () => {
  * @returns boolean
  */
 export const isPreview = () => {
-  return document.location.hash.includes('preview')
+    return document.location.hash.includes('preview')
 }
 
 /**
@@ -145,26 +145,26 @@ export const isPreview = () => {
  * @returns object
  */
 export const fetchRouteParams = () => {
-  try {
-    const route = useRoute()
-    return route.params
-  } catch (error) {
-    window['$message'].warning('查询路由信息失败，请联系管理员！')
-  }
+    try {
+        const route = useRoute()
+        return route.params
+    } catch (error) {
+        window['$message'].warning('查询路由信息失败，请联系管理员！')
+    }
 }
 
 /**
  * * 通过硬解析获取当前路由下的参数
  * @returns object
  */
- export const fetchRouteParamsLocation = () => {
-  try {
-    // 防止添加query参数的时候，解析ID异常
-    return document.location.hash.split('?')[0].split('/').pop() || ''
-  } catch (error) {
-    window['$message'].warning('查询路由信息失败，请联系管理员！')
-    return ''
-  }
+export const fetchRouteParamsLocation = () => {
+    try {
+        // 防止添加query参数的时候，解析ID异常
+        return document.location.hash.split('?')[0].split('/').pop() || ''
+    } catch (error) {
+        window['$message'].warning('查询路由信息失败，请联系管理员！')
+        return ''
+    }
 }
 
 /**
@@ -172,7 +172,7 @@ export const fetchRouteParams = () => {
  * @param confirm
  */
 export const goHome = () => {
-  routerTurnByName(PageEnum.BASE_HOME_NAME)
+    routerTurnByName(PageEnum.BASE_HOME_NAME)
 }
 
 /**
@@ -180,15 +180,26 @@ export const goHome = () => {
  * @return boolean
  */
 export const loginCheck = () => {
-  try {
-    const info = getLocalStorage(StorageEnum.GO_LOGIN_INFO_STORE)
-    if (!info) return false
-    const decodeInfo = cryptoDecode(info)
-    if (decodeInfo) {
-      return true
+    try {
+        const info = getLocalStorage(StorageEnum.GO_LOGIN_INFO_STORE)
+        if (!info) return false
+        const decodeInfo = cryptoDecode(info)
+        if (decodeInfo) {
+            return true
+        }
+        return false
+    } catch (error) {
+        return false
     }
-    return false
-  } catch (error) {
-    return false
-  }
+}
+
+/**
+ * * 预览地址
+ * @returns 
+ */
+export const previewPath = (id?: string | number) => {
+    const { origin, pathname } = document.location
+    const path = fetchPathByName(PreviewEnum.CHART_PREVIEW_NAME, 'href')
+    const previewPath = `${origin}${pathname}${path}/${id || fetchRouteParamsLocation()}`
+    return previewPath
 }

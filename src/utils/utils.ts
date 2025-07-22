@@ -17,7 +17,7 @@ import { excludeParseEventKeyList, excludeParseEventValueList } from '@/enums/ev
  * @return { Boolean }
  */
 export const isDev = () => {
-  return import.meta.env.DEV
+    return import.meta.env.DEV
 }
 
 /**
@@ -25,7 +25,7 @@ export const isDev = () => {
  * @param { Number } randomLength
  */
 export const getUUID = (randomLength = 10) => {
-  return 'id_' + Number(Math.random().toString().substring(2, randomLength) + Date.now()).toString(36)
+    return 'id_' + Number(Math.random().toString().substring(2, randomLength) + Date.now()).toString(36)
 }
 
 /**
@@ -34,7 +34,7 @@ export const getUUID = (randomLength = 10) => {
  *  @param set 设置项
  */
 export const renderIcon = (icon: any, set = {}) => {
-  return () => h(NIcon, set, { default: () => h(icon) })
+    return () => h(NIcon, set, { default: () => h(icon) })
 }
 /**
  * * render 语言
@@ -43,7 +43,7 @@ export const renderIcon = (icon: any, set = {}) => {
  *  @param tag 要渲染成的标签
  */
 export const renderLang = (lang: string, set = {}, tag = 'span') => {
-  return () => h(tag, set, { default: () => window['$t'](lang) })
+    return () => h(tag, set, { default: () => window['$t'](lang) })
 }
 
 /**
@@ -51,7 +51,7 @@ export const renderLang = (lang: string, set = {}, tag = 'span') => {
  * @returns url
  */
 export const requireErrorImg = () => {
-  return Image_404
+    return Image_404
 }
 
 /**
@@ -61,18 +61,18 @@ export const requireErrorImg = () => {
  * @returns
  */
 export const screenfullFn = (isFullscreen?: boolean, isEnabled?: boolean) => {
-  // 是否是全屏
-  if (isFullscreen) return screenfull.isFullscreen
+    // 是否是全屏
+    if (isFullscreen) return screenfull.isFullscreen
 
-  // 是否支持全屏
-  if (isEnabled) return screenfull.isEnabled
+    // 是否支持全屏
+    if (isEnabled) return screenfull.isEnabled
 
-  if (screenfull.isEnabled) {
-    screenfull.toggle()
-    return
-  }
-  // TODO lang
-  window['$message'].warning('您的浏览器不支持全屏功能！')
+    if (screenfull.isEnabled) {
+        screenfull.toggle()
+        return
+    }
+    // TODO lang
+    window['$message'].warning('您的浏览器不支持全屏功能！')
 }
 
 /**
@@ -82,12 +82,12 @@ export const screenfullFn = (isFullscreen?: boolean, isEnabled?: boolean) => {
  * @param y Y轴
  */
 export const setComponentPosition = (
-  target: CreateComponentType | CreateComponentGroupType,
-  x?: number,
-  y?: number
+    target: CreateComponentType | CreateComponentGroupType,
+    x?: number,
+    y?: number
 ) => {
-  x && (target.attr.x = x)
-  y && (target.attr.y = y)
+    x && (target.attr.x = x)
+    y && (target.attr.y = y)
 }
 
 /**
@@ -97,13 +97,13 @@ export const setComponentPosition = (
  * @param value 键值
  */
 export const setDomAttribute = <K extends keyof CSSStyleDeclaration, V extends CSSStyleDeclaration[K]>(
-  HTMLElement: HTMLElement,
-  key: K,
-  value: V
+    HTMLElement: HTMLElement,
+    key: K,
+    value: V
 ) => {
-  if (HTMLElement) {
-    HTMLElement.style[key] = value
-  }
+    if (HTMLElement) {
+        HTMLElement.style[key] = value
+    }
 }
 
 /**
@@ -111,30 +111,30 @@ export const setDomAttribute = <K extends keyof CSSStyleDeclaration, V extends C
  * @returns boolean
  */
 export const isMac = () => {
-  return /macintosh|mac os x/i.test(navigator.userAgent)
+    return /macintosh|mac os x/i.test(navigator.userAgent)
 }
 
 /**
  * * file转url
  */
 export const fileToUrl = (file: File): string => {
-  const Url = URL || window.URL || window.webkitURL
-  const ImageUrl = Url.createObjectURL(file)
-  return ImageUrl
+    const Url = URL || window.URL || window.webkitURL
+    const ImageUrl = Url.createObjectURL(file)
+    return ImageUrl
 }
 
 /**
  * * file转base64
  */
 export const fileTobase64 = (file: File, callback: Function) => {
-  let reader = new FileReader()
-  reader.readAsDataURL(file)
-  reader.onload = function (e: ProgressEvent<FileReader>) {
-    if (e.target) {
-      let base64 = e.target.result
-      callback(base64)
+    let reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = function (e: ProgressEvent<FileReader>) {
+        if (e.target) {
+            let base64 = e.target.result
+            callback(base64)
+        }
     }
-  }
 }
 
 /**
@@ -142,22 +142,22 @@ export const fileTobase64 = (file: File, callback: Function) => {
  */
 // eslint-disable-next-line no-undef
 export const addEventListener = <K extends keyof WindowEventMap>(
-  target: HTMLElement | Document,
-  type: K,
-  listener: any,
-  delay?: number,
-  // eslint-disable-next-line no-undef
-  options?: boolean | AddEventListenerOptions | undefined
+    target: HTMLElement | Document,
+    type: K,
+    listener: any,
+    delay?: number,
+    // eslint-disable-next-line no-undef
+    options?: boolean | AddEventListenerOptions | undefined
 ) => {
-  if (!target) return
-  target.addEventListener(
-    type,
-    throttle(listener, delay || 300, {
-      leading: true,
-      trailing: false
-    }),
-    options
-  )
+    if (!target) return
+    target.addEventListener(
+        type,
+        throttle(listener, delay || 300, {
+            leading: true,
+            trailing: false
+        }),
+        options
+    )
 }
 
 /**
@@ -165,12 +165,12 @@ export const addEventListener = <K extends keyof WindowEventMap>(
  */
 // eslint-disable-next-line no-undef
 export const removeEventListener = <K extends keyof WindowEventMap>(
-  target: HTMLElement | Document,
-  type: K,
-  listener: any
+    target: HTMLElement | Document,
+    type: K,
+    listener: any
 ) => {
-  if (!target) return
-  target.removeEventListener(type, listener)
+    if (!target) return
+    target.removeEventListener(type, listener)
 }
 
 /**
@@ -178,21 +178,21 @@ export const removeEventListener = <K extends keyof WindowEventMap>(
  * @param html 需要截取的 DOM
  */
 export const canvasCut = (html: HTMLElement | null, callback?: Function) => {
-  if (!html) {
-    window['$message'].error('导出失败！')
-    if (callback) callback()
-    return
-  }
+    if (!html) {
+        window['$message'].error('导出失败！')
+        if (callback) callback()
+        return
+    }
 
-  html2canvas(html, {
-    backgroundColor: null,
-    allowTaint: true,
-    useCORS: true
-  }).then((canvas: HTMLCanvasElement) => {
-    window['$message'].success('导出成功！')
-    downloadByA(canvas.toDataURL(), undefined, 'png')
-    if (callback) callback()
-  })
+    html2canvas(html, {
+        backgroundColor: null,
+        allowTaint: true,
+        useCORS: true
+    }).then((canvas: HTMLCanvasElement) => {
+        window['$message'].success('导出成功！')
+        downloadByA(canvas.toDataURL(), undefined, 'png')
+        if (callback) callback()
+    })
 }
 
 /**
@@ -206,26 +206,26 @@ export const canvasCut = (html: HTMLElement | null, callback?: Function) => {
  * @returns
  */
 export const newFunctionHandle = (
-  data: any,
-  res: any,
-  funcStr?: string,
-  isToString?: boolean,
-  errorCallBack?: Function,
-  successCallBack?: Function
+    data: any,
+    res: any,
+    funcStr?: string,
+    isToString?: boolean,
+    errorCallBack?: Function,
+    successCallBack?: Function
 ) => {
-  try {
-    if (!funcStr) return data
-    const fn = new Function('data', 'res', funcStr)
-    const fnRes = fn(cloneDeep(data), cloneDeep(res))
-    const resHandle = isToString ? toString(fnRes) : fnRes
-    // 成功回调
-    successCallBack && successCallBack(resHandle)
-    return resHandle
-  } catch (error) {
-    // 失败回调
-    errorCallBack && errorCallBack(error)
-    return '函数执行错误'
-  }
+    try {
+        if (!funcStr) return data
+        const fn = new Function('data', 'res', funcStr)
+        const fnRes = fn(cloneDeep(data), cloneDeep(res))
+        const resHandle = isToString ? toString(fnRes) : fnRes
+        // 成功回调
+        successCallBack && successCallBack(resHandle)
+        return resHandle
+    } catch (error) {
+        // 失败回调
+        errorCallBack && errorCallBack(error)
+        return '函数执行错误'
+    }
 }
 
 /**
@@ -235,22 +235,22 @@ export const newFunctionHandle = (
  * @return number 秒数
  */
 export const intervalUnitHandle = (num: number, unit: RequestHttpIntervalEnum) => {
-  switch (unit) {
-    // 秒
-    case RequestHttpIntervalEnum.SECOND:
-      return num * 1000
-    // 分
-    case RequestHttpIntervalEnum.MINUTE:
-      return num * 1000 * 60
-    // 时
-    case RequestHttpIntervalEnum.HOUR:
-      return num * 1000 * 60 * 60
-    // 天
-    case RequestHttpIntervalEnum.DAY:
-      return num * 1000 * 60 * 60 * 24
-    default:
-      return num * 1000
-  }
+    switch (unit) {
+        // 秒
+        case RequestHttpIntervalEnum.SECOND:
+            return num * 1000
+        // 分
+        case RequestHttpIntervalEnum.MINUTE:
+            return num * 1000 * 60
+        // 时
+        case RequestHttpIntervalEnum.HOUR:
+            return num * 1000 * 60 * 60
+        // 天
+        case RequestHttpIntervalEnum.DAY:
+            return num * 1000 * 60 * 60 * 24
+        default:
+            return num * 1000
+    }
 }
 
 /**
@@ -259,13 +259,13 @@ export const intervalUnitHandle = (num: number, unit: RequestHttpIntervalEnum) =
  * @returns string
  */
 export const objToCookie = (obj: RequestParamsObjType) => {
-  if (!obj) return ''
+    if (!obj) return ''
 
-  let str = ''
-  for (const key in obj) {
-    str += key + '=' + obj[key] + ';'
-  }
-  return str.substring(0, str.length - 1)
+    let str = ''
+    for (const key in obj) {
+        str += key + '=' + obj[key] + ';'
+    }
+    return str.substring(0, str.length - 1)
 }
 
 /**
@@ -274,22 +274,22 @@ export const objToCookie = (obj: RequestParamsObjType) => {
  * @returns
  */
 export const setKeyboardDressShow = (keyCode?: number) => {
-  const code = new Map([
-    [17, WinKeyboard.CTRL],
-    [32, WinKeyboard.SPACE]
-  ])
+    const code = new Map([
+        [17, WinKeyboard.CTRL],
+        [32, WinKeyboard.SPACE]
+    ])
 
-  const dom = document.getElementById('keyboard-dress-show')
-  if (!dom) return
-  if (!keyCode) {
-    window.onKeySpacePressHold?.(false)
-    dom.innerText = ''
-    return
-  }
-  if (keyCode && code.has(keyCode)) {
-    if (keyCode == 32) window.onKeySpacePressHold?.(true)
-    dom.innerText = `按下了「${code.get(keyCode)}」键`
-  }
+    const dom = document.getElementById('keyboard-dress-show')
+    if (!dom) return
+    if (!keyCode) {
+        window.onKeySpacePressHold?.(false)
+        dom.innerText = ''
+        return
+    }
+    if (keyCode && code.has(keyCode)) {
+        if (keyCode == 32) window.onKeySpacePressHold?.(true)
+        dom.innerText = `按下了「${code.get(keyCode)}」键`
+    }
 }
 
 /**
@@ -297,26 +297,26 @@ export const setKeyboardDressShow = (keyCode?: number) => {
  * @param data
  */
 export const JSONStringify = <T>(data: T) => {
-  return JSON.stringify(
-    data,
-    (key, val) => {
-      // 处理函数丢失问题
-      if (typeof val === 'function') {
-        return `${val}`
-      }
-      // 处理 undefined 丢失问题
-      if (typeof val === 'undefined') {
-        return null
-      }
-      return val
-    },
-    2
-  )
+    return JSON.stringify(
+        data,
+        (key, val) => {
+            // 处理函数丢失问题
+            if (typeof val === 'function') {
+                return `${val}`
+            }
+            // 处理 undefined 丢失问题
+            if (typeof val === 'undefined') {
+                return null
+            }
+            return val
+        },
+        2
+    )
 }
 
 export const evalFn = (fn: string) => {
-  var Fun = Function // 一个变量指向Function，防止前端编译工具报错
-  return new Fun('return ' + fn)()
+    var Fun = Function // 一个变量指向Function，防止前端编译工具报错
+    return new Fun('return ' + fn)()
 }
 
 /**
@@ -324,30 +324,30 @@ export const evalFn = (fn: string) => {
  * @param data
  */
 export const JSONParse = (data: string) => {
-  if (data.trim() === '') return
-  return JSON.parse(data, (k, v) => {
-    // // 过滤函数字符串
-    // if (excludeParseEventKeyList.includes(k)) return v
-    // // 过滤函数值表达式
-    // if (typeof v === 'string') {
-    //   const someValue = excludeParseEventValueList.some(excludeValue => v.indexOf(excludeValue) > -1)
-    //   if (someValue) return v
-    // }
-    if (k !== 'formatter') {
-      return v
-    }
-    // 还原函数值
-    if (typeof v === 'string' && v.indexOf && (v.indexOf('function') > -1 || v.indexOf('=>') > -1)) {
-      return evalFn(`(function(){return ${v}})()`)
-    } else if (typeof v === 'string' && v.indexOf && v.indexOf('return ') > -1) {
-      const baseLeftIndex = v.indexOf('(')
-      if (baseLeftIndex > -1) {
-        const newFn = `function ${v.substring(baseLeftIndex)}`
-        return evalFn(`(function(){return ${newFn}})()`)
-      }
-    }
-    return v
-  })
+    if (data.trim() === '') return
+    return JSON.parse(data, (k, v) => {
+        // // 过滤函数字符串
+        // if (excludeParseEventKeyList.includes(k)) return v
+        // // 过滤函数值表达式
+        // if (typeof v === 'string') {
+        //   const someValue = excludeParseEventValueList.some(excludeValue => v.indexOf(excludeValue) > -1)
+        //   if (someValue) return v
+        // }
+        if (k !== 'formatter') {
+            return v
+        }
+        // 还原函数值
+        if (typeof v === 'string' && v.indexOf && (v.indexOf('function') > -1 || v.indexOf('=>') > -1)) {
+            return evalFn(`(function(){return ${v}})()`)
+        } else if (typeof v === 'string' && v.indexOf && v.indexOf('return ') > -1) {
+            const baseLeftIndex = v.indexOf('(')
+            if (baseLeftIndex > -1) {
+                const newFn = `function ${v.substring(baseLeftIndex)}`
+                return evalFn(`(function(){return ${newFn}})()`)
+            }
+        }
+        return v
+    })
 }
 
 /**
@@ -355,5 +355,5 @@ export const JSONParse = (data: string) => {
  * @param title
  */
 export const setTitle = (title?: string) => {
-  title && (document.title = title)
+    title && (document.title = title)
 }
