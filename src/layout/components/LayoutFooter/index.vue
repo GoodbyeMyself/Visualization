@@ -2,7 +2,7 @@
     <div class="go-footer">
         <slot>
             <n-space :size="50">
-                <n-text depth="2"> xxxxxxxxxxx </n-text>
+                <n-text depth="2">© 2026 Visualization 低代码数据可视化开发平台</n-text>
             </n-space>
         </slot>
     </div>

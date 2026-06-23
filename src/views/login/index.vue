@@ -31,13 +31,10 @@
             <div class="login-account">
                 <div class="login-account-container">
                     <n-collapse-transition :appear="true" :show="show">
-                        <n-card class="login-account-card" :title="$t('login.desc')">
+                        <n-card class="login-account-card">
                             <div class="login-account-top">
-                                <img
-                                    class="login-account-top-logo"
-                                    src="~@/assets/images/login/input.png"
-                                    alt="展示图片"
-                                />
+                                <h1 class="login-account-top-title">{{ $t('login.brand_title') }}</h1>
+                                <p class="login-account-top-subtitle">{{ $t('login.brand_subtitle') }}</p>
                             </div>
                             <n-form
                                 ref="formRef"
@@ -275,10 +272,25 @@ $carousel-image-height: 60vh;
             }
 
             &-top {
-                padding-top: 10px;
+                padding: 8px 0 28px;
                 text-align: center;
-                height: 140px;
-                margin-bottom: 20px;
+
+                &-title {
+                    margin: 0;
+                    font-size: 28px;
+                    font-weight: 600;
+                    letter-spacing: 0.02em;
+                    line-height: 1.2;
+                    @include fetch-theme('color');
+                }
+
+                &-subtitle {
+                    margin: 10px 0 0;
+                    font-size: 14px;
+                    line-height: 1.5;
+                    letter-spacing: 0.04em;
+                    opacity: 0.55;
+                }
             }
         }
     }
@@ -298,7 +310,8 @@ $carousel-image-height: 60vh;
         align-items: center;
         width: 100vw;
         height: 100vh;
-        background: url('@/assets/images/login/login-bg.png') no-repeat 0 -120px;
+        background: url('@/assets/images/login/login-bg.png') no-repeat 50px -50px;
+        background-size: 50%;
         .bg-slot {
             width: $carousel-width;
         }

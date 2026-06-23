@@ -2,7 +2,7 @@ import { h } from 'vue'
 import { NIcon } from 'naive-ui'
 import screenfull from 'screenfull'
 import throttle from 'lodash/throttle'
-import Image_404 from '../assets/images/exception/image-404.png'
+import NoDataImg from '../assets/images/exception/nodata.svg'
 import html2canvas from 'html2canvas'
 import { downloadByA } from './file'
 import { toString } from './type'
@@ -47,11 +47,11 @@ export const renderLang = (lang: string, set = {}, tag = 'span') => {
 }
 
 /**
- * * 获取错误处理图片，默认 404 图
+ * * 获取错误处理图片，默认暂无数据图
  * @returns url
  */
 export const requireErrorImg = () => {
-    return Image_404
+    return NoDataImg
 }
 
 /**
@@ -171,6 +171,38 @@ export const removeEventListener = <K extends keyof WindowEventMap>(
 ) => {
     if (!target) return
     target.removeEventListener(type, listener)
+}
+
+/**
+ * * 截取画布区域生成缩略图（base64）
+ * @returns 缩略图 dataURL，失败时返回 null
+ */
+export const captureProjectThumbnail = async (): Promise<string | null> => {
+    const range = document.querySelector('.go-edit-range') as HTMLElement
+    if (!range) return null
+
+    try {
+        const canvas = await html2canvas(range, {
+            backgroundColor: null,
+            allowTaint: true,
+            useCORS: true,
+            scale: 0.5
+        })
+
+        const maxWidth = 400
+        const ratio = maxWidth / canvas.width
+        const thumbCanvas = document.createElement('canvas')
+        thumbCanvas.width = maxWidth
+        thumbCanvas.height = Math.round(canvas.height * ratio)
+        const ctx = thumbCanvas.getContext('2d')
+        if (!ctx) return canvas.toDataURL('image/jpeg', 0.7)
+
+        ctx.drawImage(canvas, 0, 0, thumbCanvas.width, thumbCanvas.height)
+        return thumbCanvas.toDataURL('image/jpeg', 0.7)
+    } catch (error) {
+        console.error('captureProjectThumbnail failed:', error)
+        return null
+    }
 }
 
 /**

@@ -2,6 +2,8 @@
   <div class="content-left">
     <div
       class="content-left-item go-transition-quick go-mb-0"
+      :class="{ 'content-left-item-active': item.hex === selectedHex }"
+      :data-hex="item.hex"
       span="12 1000:6 1400:4 1800:4 2200:2"
       v-for="(item, index) in designColorRecommend"
       :key="index"
@@ -27,6 +29,8 @@
     <n-divider></n-divider>
     <div
       class="content-left-item go-transition-quick"
+      :class="{ 'content-left-item-active': item.hex === selectedHex }"
+      :data-hex="item.hex"
       span="12 1000:6 1400:4 1800:4 2200:2"
       v-for="(item, index) in designColor"
       :key="index"
@@ -58,10 +62,14 @@ import { AppThemeColorType } from '@/store/modules/designStore/designStore.d'
 import designColorRecommend from '@/settings/designColorRecommend.json'
 
 const emits = defineEmits(['colorSelectHandle'])
-defineProps({
+const props = defineProps({
   designColor: {
     type: Object as PropType<AppThemeColorType[]>,
     required: true
+  },
+  selectedHex: {
+    type: String,
+    default: ''
   }
 })
 const colorSelectHandle = (color: AppThemeColorType) => {
@@ -84,8 +92,12 @@ const colorSelectHandle = (color: AppThemeColorType) => {
     border-radius: 5px;
     cursor: pointer;
     border: 1px solid rgba(0, 0, 0, 0);
-    &:hover {
+    &:hover,
+    &-active {
       @include hover-border-color("background-color5");
+    }
+    &-active {
+      border-color: v-bind('props.selectedHex');
     }
     &::after {
       content: "";

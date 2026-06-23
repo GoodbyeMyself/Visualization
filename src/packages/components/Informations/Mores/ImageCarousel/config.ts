@@ -2,7 +2,7 @@ import { PublicConfigClass } from '@/packages/public'
 import { CreateComponentType } from '@/packages/index.d'
 import { ImageCarouselConfig } from './index'
 import cloneDeep from 'lodash/cloneDeep'
-import logo from '@/assets/logo.png'
+import logo from '@/assets/logo.svg'
 
 export const option = {
   // 图片资源列表

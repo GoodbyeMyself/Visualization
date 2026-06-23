@@ -17,7 +17,7 @@
                         object-fit="contain"
                         height="180"
                         preview-disabled
-                        :src="requireUrl('project/moke-20211219181327.png')"
+                        :src="cardData.indexImage || requireErrorImg()"
                         :alt="cardData.title"
                         :fallback-src="requireErrorImg()"
                     ></n-image>
@@ -83,7 +83,6 @@ import { renderIcon, renderLang, requireErrorImg } from '@/utils'
 import { icon } from '@/plugins'
 import { MacOsControlBtn } from '@/components/Tips/MacOsControlBtn'
 import { Chartype } from '../../index.d'
-import { log } from 'console'
 const {
     EllipsisHorizontalCircleSharpIcon,
     CopyIcon,
@@ -100,11 +99,6 @@ const emit = defineEmits(['delete', 'resize', 'edit', 'preview', 'send'])
 const props = defineProps({
     cardData: Object as PropType<Chartype>
 })
-
-// 处理url获取
-const requireUrl = (name: string) => {
-    return new URL(`../../../../../assets/images/${name}`, import.meta.url).href
-}
 
 const fnBtnList = reactive([
     {

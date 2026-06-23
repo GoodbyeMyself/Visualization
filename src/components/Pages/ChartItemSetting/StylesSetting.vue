@@ -169,7 +169,7 @@ import { ref, PropType } from 'vue'
 import { PickCreateComponentType, BlendModeEnumList } from '@/packages/index.d'
 import { SettingItemBox, SettingItem, CollapseItem } from '@/components/Pages/ChartItemSetting'
 import { icon } from '@/plugins'
-import logoImg from '@/assets/logo.png'
+import logoImg from '@/assets/logo.svg'
 import { useDesignStore } from '@/store/modules/designStore/designStore'
 
 const props = defineProps({

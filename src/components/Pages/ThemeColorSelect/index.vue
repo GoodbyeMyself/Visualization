@@ -15,7 +15,11 @@
       <n-divider></n-divider>
       <div class="model-content" ref="contentLeftRef">
         <div class="content-left" v-if="modelShow">
-          <color-list :designColor="designColorSplit" @colorSelectHandle="colorSelectHandle"></color-list>
+          <color-list
+            :designColor="designColorSplit"
+            :selectedHex="designStore.appTheme"
+            @colorSelectHandle="colorSelectHandle"
+          ></color-list>
         </div>
         <div class="content-right">
           <div class="color-name-detail">
@@ -43,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, toRefs } from 'vue'
+import { ref, computed, watch, toRefs, nextTick } from 'vue'
 import { useDesignStore } from '@/store/modules/designStore/designStore'
 import { AppThemeColorType } from '@/store/modules/designStore/designStore.d'
 import { icon } from '@/plugins'
@@ -57,12 +61,14 @@ const ColorList = loadAsyncComponent(() =>
 )
 const { ColorWandIcon, CloseIcon } = icon.ionicons5
 
-let splitNumber = 50
+const PAGE_SIZE = 50
 
 const designStore = useDesignStore()
 const modelShow = ref(false)
 const contentLeftRef = ref<HTMLElement | null>(null)
-const designColorSplit = ref(designColor.slice(0, splitNumber))
+const listOffset = ref(0)
+const visibleCount = ref(PAGE_SIZE)
+const designColorSplit = ref(designColor.slice(0, PAGE_SIZE))
 
 const { arrivedState } = useScroll(contentLeftRef, {
   offset: { bottom: 200 },
@@ -73,20 +79,76 @@ const appThemeDetail = computed(() => {
   return designStore.getAppThemeDetail
 })
 
+const refreshColorList = () => {
+  designColorSplit.value = designColor.slice(
+    listOffset.value,
+    listOffset.value + visibleCount.value
+  )
+}
+
+const findColorIndex = (color: AppThemeColorType): number => {
+  const exactIndex = designColor.findIndex(c => c.hex === color.hex)
+  if (exactIndex >= 0) return exactIndex
+
+  const [r, g, b] = color.RGB
+  let closestIndex = 0
+  let minDist = Infinity
+  designColor.forEach((c, i) => {
+    const dist = (c.RGB[0] - r) ** 2 + (c.RGB[1] - g) ** 2 + (c.RGB[2] - b) ** 2
+    if (dist < minDist) {
+      minDist = dist
+      closestIndex = i
+    }
+  })
+  return closestIndex
+}
+
+const scrollToColor = (hex: string) => {
+  nextTick(() => {
+    const el = contentLeftRef.value?.querySelector(`[data-hex="${hex}"]`)
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  })
+}
+
+const positionToColor = (color: AppThemeColorType) => {
+  const index = findColorIndex(color)
+  const targetHex = designColor[index].hex
+  listOffset.value = Math.max(0, index - 8)
+  visibleCount.value = PAGE_SIZE
+  refreshColorList()
+  scrollToColor(color.hex === targetHex ? color.hex : targetHex)
+}
+
+const resetColorList = () => {
+  listOffset.value = 0
+  visibleCount.value = PAGE_SIZE
+  refreshColorList()
+}
+
 const colorSelectHandle = (color: AppThemeColorType) => {
   designStore.setAppColor(color)
+  positionToColor(color)
 }
 
 watch(() => bottom.value, (newData: boolean) => {
-  if (newData) {
-    splitNumber = splitNumber + 50
-    designColorSplit.value = designColor.slice(0, splitNumber)
+  if (newData && listOffset.value + visibleCount.value < designColor.length) {
+    visibleCount.value += PAGE_SIZE
+    refreshColorList()
   }
 })
 
-watch(() => modelShow.value, (modelShow: boolean) => {
-  if (!modelShow) {
-    splitNumber = 50
+watch(() => modelShow.value, (show: boolean) => {
+  if (show) {
+    nextTick(() => {
+      const detail = designStore.getAppThemeDetail
+      if (detail) {
+        positionToColor(detail)
+      } else {
+        resetColorList()
+      }
+    })
+  } else {
+    resetColorList()
   }
 })
 </script>

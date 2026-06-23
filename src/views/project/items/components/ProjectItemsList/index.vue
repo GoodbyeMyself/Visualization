@@ -71,7 +71,7 @@ const EmptyIcon = FolderOpenIcon
 // 监听项目保存事件
 const handleProjectSave = (event: any) => {
     const projectData = event.detail
-    const projectId = route.params.id
+    const projectId = projectData?.id || route.params.id
     
     if (projectId && projectData) {
         // 更新项目列表中的项目信息
@@ -92,8 +92,9 @@ const handleProjectSave = (event: any) => {
             currentList[projectIndex] = {
                 ...currentList[projectIndex],
                 title: projectTitle,
-                release: false, // 可以根据需要设置发布状态
-                label: '我的项目'
+                release: false,
+                label: '我的项目',
+                indexImage: projectData.indexImage || currentList[projectIndex].indexImage
             }
             
             // 更新列表和本地缓存

@@ -14,7 +14,7 @@
             <aside>
                 <n-space vertical class="go-project-sider-top">
                     <div class="logo-container" :class="{ 'collapsed': collapsed }">
-                        <img src="@/assets/logo.png" alt="Logo" class="logo-image" />
+                        <GoLogo class="logo-image" />
                         <span class="project-name" v-show="!collapsed">
                             Visualization
                         </span>
@@ -39,6 +39,7 @@ import { asideWidth } from '@/settings/designSetting'
 import { useRoute } from 'vue-router'
 import { useSettingStore } from '@/store/modules/settingStore/settingStore'
 import { menuOptionsInit, expandedKeys } from './menu'
+import { GoLogo } from '@/components/GoLogo'
 
 const collapsed = ref<boolean>(false)
 
@@ -84,7 +85,7 @@ $siderHeight: 100vh;
             .logo-container {
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                gap: 12px;
                 padding: 20px 30px;
                 width: 100%;
 

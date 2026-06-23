@@ -7,7 +7,8 @@ import { useSync } from '@/views/chart/hooks/useSync.hook'
 import { ChartEnum } from '@/enums/pageEnum'
 import { SavePageEnum } from '@/enums/editPageEnum'
 
-import { fetchRouteParamsLocation, getSessionStorage, setSessionStorage, goDialog } from '@/utils'
+import { fetchRouteParamsLocation, getSessionStorage, setSessionStorage, captureProjectThumbnail } from '@/utils'
+import { updateProjectInfo } from '@/views/project/items/components/ProjectItemsList/hooks/useData.hook'
 
 import { editToJsonInterval } from '@/settings/designSetting'
 import { StorageEnum } from '@/enums/storageEnum'
@@ -16,48 +17,45 @@ const { updateComponent } = useSync()
 
 const chartEditStore = useChartEditStore()
 
-export const syncData = (hasMessage: boolean = true) => {
-    // 获取 路由 id
-    const id = fetchRouteParamsLocation();
-
+export const syncData = async (hasMessage: boolean = true, updateThumbnail: boolean = false) => {
+    const id = fetchRouteParamsLocation()
     const storageInfo = chartEditStore.getStorageInfo()
-
-    const sessionStorageInfo = getSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST) || [];
+    const sessionStorageInfo = getSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST) || []
 
     if (sessionStorageInfo?.length) {
-        // 查询 是否存在索引
         const repeateIndex = sessionStorageInfo.findIndex((e: { id: string }) => e.id === id)
-        // 重复替换
         if (repeateIndex !== -1) {
-            sessionStorageInfo.splice(repeateIndex, 1, {
-                id: id,
-                ...storageInfo
-            })
+            sessionStorageInfo.splice(repeateIndex, 1, { id, ...storageInfo })
             setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, sessionStorageInfo)
         } else {
-            sessionStorageInfo.push({
-                id: id,
-                ...storageInfo
-            })
+            sessionStorageInfo.push({ id, ...storageInfo })
             setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, sessionStorageInfo)
         }
     } else {
-        setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, [{
-            id: id,
-            ...storageInfo
-        }])
+        setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, [{ id, ...storageInfo }])
     }
 
-    // --
-    // dispatchEvent(new CustomEvent(SavePageEnum.CHART, {
-    //     detail: chartEditStore.getStorageInfo()
-    // }))
+    let indexImage: string | undefined
+    if (hasMessage || updateThumbnail) {
+        const thumbnail = await captureProjectThumbnail()
+        if (thumbnail) {
+            indexImage = thumbnail
+            updateProjectInfo(id, { indexImage: thumbnail })
+        }
+    }
 
-    // --
+    dispatchEvent(new CustomEvent(SavePageEnum.CHART, {
+        detail: { id, ...storageInfo, indexImage }
+    }))
+
     if (hasMessage) {
         window['$message'].success('保存成功')
     }
 }
+
+const syncThumbnailOnBlur = throttle(async () => {
+    await syncData(false, true)
+}, 10000)
 
 // 同步数据到预览页
 export const syncDataToPreview = () => {
@@ -90,8 +88,9 @@ const useSyncUpdateHandle = () => {
             document.hasFocus() && syncData(false);
         }, editToJsonInterval)
 
-        // 失焦同步数据
+        // 失焦同步数据与缩略图
         addEventListener('blur', syncDataToPreview)
+        addEventListener('blur', syncThumbnailOnBlur)
 
         // 监听编辑器保存事件 刷新工作台图表
         addEventListener(SavePageEnum.JSON, updateFn)
@@ -104,6 +103,7 @@ const useSyncUpdateHandle = () => {
     const unUse = () => {
         // clearInterval(timer)
         removeEventListener('blur', syncDataToPreview)
+        removeEventListener('blur', syncThumbnailOnBlur)
         removeEventListener(SavePageEnum.JSON, updateFn)
     }
 

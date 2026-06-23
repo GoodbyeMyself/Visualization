@@ -13,7 +13,7 @@ import { requireErrorImg } from '@/utils'
 
 <style lang="scss" scoped>
 @include go('project-my-template') {
-    margin-top: 100px;
+    min-height: calc(100vh - #{$--header-height});
     @extend .go-flex-center;
 }
 </style>

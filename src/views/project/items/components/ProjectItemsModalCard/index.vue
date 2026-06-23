@@ -16,7 +16,13 @@
                 </n-space>
                 <!-- 中间 -->
                 <div class="list-content-img">
-                    <img :src="requireUrl('project/moke-20211219181327.png')" :alt="cardData?.title" />
+                    <n-image
+                        object-fit="contain"
+                        preview-disabled
+                        :src="cardData?.indexImage || requireErrorImg()"
+                        :alt="cardData?.title"
+                        :fallback-src="requireErrorImg()"
+                    ></n-image>
                 </div>
             </div>
             <template #action>
@@ -58,7 +64,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
-import { renderIcon, renderLang } from '@/utils'
+import { renderIcon, renderLang, requireErrorImg } from '@/utils'
 import { icon } from '@/plugins'
 import { MacOsControlBtn } from '@/components/Tips/MacOsControlBtn'
 
@@ -86,11 +92,6 @@ watch(
         immediate: true
     }
 )
-
-// 处理url获取
-const requireUrl = (name: string) => {
-    return new URL(`../../../../../assets/images/${name}`, import.meta.url).href
-}
 
 const fnBtnList = reactive([
     {
@@ -142,11 +143,13 @@ $contentWidth: calc(82vw);
         }
         &-img {
             @extend .go-flex-center;
-            img {
-                max-height: $contentHeight;
-                min-height: 200px;
-                max-width: 100%;
-                @extend .go-border-radius;
+            @include deep() {
+                img {
+                    max-height: $contentHeight;
+                    min-height: 200px;
+                    max-width: 100%;
+                    @extend .go-border-radius;
+                }
             }
         }
     }
