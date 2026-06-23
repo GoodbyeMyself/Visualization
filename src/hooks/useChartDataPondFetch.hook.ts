@@ -20,18 +20,20 @@ const mittDataPondMap = new Map<string, DataPondMapType[]>()
 // 创建单个数据项轮询接口
 const newPondItemInterval = (
   requestGlobalConfig: RequestGlobalConfigType,
-  requestDataPondItem: ComputedRef<RequestDataPondItemType>,
+  requestDataPondItem: ComputedRef<RequestDataPondItemType | undefined>,
   dataPondMapItem?: DataPondMapType[]
 ) => {
-  if (!dataPondMapItem) return
+  if (!dataPondMapItem?.length || !requestDataPondItem.value?.dataPondRequestConfig) return
   let fetchInterval: any = 0
 
   clearInterval(fetchInterval)
 
   // 请求
   const fetchFn = async () => {
+    const pondItem = requestDataPondItem.value
+    if (!pondItem?.dataPondRequestConfig) return
     try {
-      const res = await customizeHttp(toRaw(requestDataPondItem.value.dataPondRequestConfig), toRaw(requestGlobalConfig))
+      const res = await customizeHttp(toRaw(pondItem.dataPondRequestConfig), toRaw(requestGlobalConfig))
       if (res) {
         try {
           // 遍历更新回调函数
@@ -49,7 +51,7 @@ const newPondItemInterval = (
   }
 
   watch(
-    () => requestDataPondItem.value.dataPondRequestConfig.requestParams.Params,
+    () => requestDataPondItem.value?.dataPondRequestConfig?.requestParams?.Params,
     () => {
       fetchFn()
     },
@@ -63,9 +65,9 @@ const newPondItemInterval = (
   // 立即调用
   fetchFn()
 
-
-  const targetInterval = requestDataPondItem.value.dataPondRequestConfig.requestInterval
-  const targetUnit = requestDataPondItem.value.dataPondRequestConfig.requestIntervalUnit
+  const pondConfig = requestDataPondItem.value.dataPondRequestConfig
+  const targetInterval = pondConfig.requestInterval
+  const targetUnit = pondConfig.requestIntervalUnit
 
   const globalRequestInterval = requestGlobalConfig.requestInterval
   const globalUnit = requestGlobalConfig.requestIntervalUnit
@@ -109,14 +111,14 @@ export const useChartDataPondFetch = () => {
 
   // 初始化数据池
   const initDataPond = (useChartEditStore: ChartEditStoreType) => {
-    const { requestGlobalConfig } = useChartEditStore()
     const chartEditStore = useChartEditStore()
+    const requestDataPond = chartEditStore.requestGlobalConfig?.requestDataPond || []
     // 根据 mapId 查找对应的数据池配置
     for (let pondKey of mittDataPondMap.keys()) {
       const requestDataPondItem = computed(() => {
-        return requestGlobalConfig.requestDataPond.find(item => item.dataPondId === pondKey)
-      }) as ComputedRef<RequestDataPondItemType>
-      if (requestDataPondItem) {
+        return requestDataPond.find(item => item.dataPondId === pondKey)
+      })
+      if (requestDataPondItem.value) {
         newPondItemInterval(chartEditStore.requestGlobalConfig, requestDataPondItem, mittDataPondMap.get(pondKey))
       }
     }

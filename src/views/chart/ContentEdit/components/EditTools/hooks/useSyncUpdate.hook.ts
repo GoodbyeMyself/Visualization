@@ -17,7 +17,7 @@ const { updateComponent } = useSync()
 
 const chartEditStore = useChartEditStore()
 
-export const syncData = async (hasMessage: boolean = true, updateThumbnail: boolean = false) => {
+export const syncData = (hasMessage: boolean = true) => {
     const id = fetchRouteParamsLocation()
     const storageInfo = chartEditStore.getStorageInfo()
     const sessionStorageInfo = getSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST) || []
@@ -35,27 +35,22 @@ export const syncData = async (hasMessage: boolean = true, updateThumbnail: bool
         setSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST, [{ id, ...storageInfo }])
     }
 
-    let indexImage: string | undefined
-    if (hasMessage || updateThumbnail) {
-        const thumbnail = await captureProjectThumbnail()
-        if (thumbnail) {
-            indexImage = thumbnail
-            updateProjectInfo(id, { indexImage: thumbnail })
-        }
-    }
-
-    dispatchEvent(new CustomEvent(SavePageEnum.CHART, {
-        detail: { id, ...storageInfo, indexImage }
-    }))
-
     if (hasMessage) {
         window['$message'].success('保存成功')
+        // 缩略图异步生成，不阻塞画布数据同步，也不写入 GO_CHART_STORAGE_LIST
+        saveProjectThumbnail(id)
     }
 }
 
-const syncThumbnailOnBlur = throttle(async () => {
-    await syncData(false, true)
-}, 10000)
+const saveProjectThumbnail = async (projectId: string) => {
+    try {
+        const thumbnail = await captureProjectThumbnail()
+        if (!thumbnail) return
+        updateProjectInfo(projectId, { indexImage: thumbnail })
+    } catch (error) {
+        console.error('saveProjectThumbnail failed:', error)
+    }
+}
 
 // 同步数据到预览页
 export const syncDataToPreview = () => {
@@ -88,9 +83,8 @@ const useSyncUpdateHandle = () => {
             document.hasFocus() && syncData(false);
         }, editToJsonInterval)
 
-        // 失焦同步数据与缩略图
+        // 失焦同步数据
         addEventListener('blur', syncDataToPreview)
-        addEventListener('blur', syncThumbnailOnBlur)
 
         // 监听编辑器保存事件 刷新工作台图表
         addEventListener(SavePageEnum.JSON, updateFn)
@@ -103,7 +97,6 @@ const useSyncUpdateHandle = () => {
     const unUse = () => {
         // clearInterval(timer)
         removeEventListener('blur', syncDataToPreview)
-        removeEventListener('blur', syncThumbnailOnBlur)
         removeEventListener(SavePageEnum.JSON, updateFn)
     }
 

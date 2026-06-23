@@ -23,13 +23,17 @@ try {
 
         window.opener.addEventListener(saveEvent, async (e: any) => {
             const localStorageInfo: ChartEditStorageType = (await getSessionStorageInfo()) as unknown as ChartEditStorageType
+            if (!localStorageInfo?.id || !e.detail) return
 
-            // 先读取 sessionStorage
             const sessionStorageInfo = getSessionStorage(StorageEnum.GO_CHART_STORAGE_LIST) || []
-
             const previewId = localStorageInfo.id
 
-            const newData = { ...e.detail, id: previewId }
+            const newData = {
+                id: previewId,
+                editCanvasConfig: e.detail.editCanvasConfig,
+                requestGlobalConfig: e.detail.requestGlobalConfig,
+                componentList: e.detail.componentList || []
+            }
             
             if (sessionStorageInfo.length) {
                 const repeateIndex = sessionStorageInfo.findIndex((item: { id: string }) => item.id === previewId)

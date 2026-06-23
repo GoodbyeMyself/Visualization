@@ -189,16 +189,16 @@ export const captureProjectThumbnail = async (): Promise<string | null> => {
             scale: 0.5
         })
 
-        const maxWidth = 400
+        const maxWidth = 300
         const ratio = maxWidth / canvas.width
         const thumbCanvas = document.createElement('canvas')
         thumbCanvas.width = maxWidth
         thumbCanvas.height = Math.round(canvas.height * ratio)
         const ctx = thumbCanvas.getContext('2d')
-        if (!ctx) return canvas.toDataURL('image/jpeg', 0.7)
+        if (!ctx) return canvas.toDataURL('image/jpeg', 0.6)
 
         ctx.drawImage(canvas, 0, 0, thumbCanvas.width, thumbCanvas.height)
-        return thumbCanvas.toDataURL('image/jpeg', 0.7)
+        return thumbCanvas.toDataURL('image/jpeg', 0.6)
     } catch (error) {
         console.error('captureProjectThumbnail failed:', error)
         return null
