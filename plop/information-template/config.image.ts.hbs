@@ -1,0 +1,17 @@
+import { PublicConfigClass } from '@/packages/public'
+import { CreateComponentType } from '@/packages/index.d'
+import { {{name}}Config } from './index'
+import cloneDeep from 'lodash/cloneDeep'
+import logo from '@/assets/logo.png'
+
+export const option = {
+  dataset: logo,
+  fit: 'contain',
+  borderRadius: 10
+}
+
+export default class Config extends PublicConfigClass implements CreateComponentType {
+  public key = {{name}}Config.key
+  public chartConfig = cloneDeep({{name}}Config)
+  public option = cloneDeep(option)
+}

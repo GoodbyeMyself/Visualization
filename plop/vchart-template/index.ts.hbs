@@ -1,0 +1,14 @@
+import { ConfigType, PackagesCategoryEnum, ChartFrameEnum } from '@/packages/index.d'
+import { ChatCategoryEnum, ChatCategoryEnumName } from '../../index.d'
+
+export const {{name}}Config: ConfigType = {
+  key: '{{name}}',
+  chartKey: 'V{{name}}',
+  conKey: 'VC{{name}}',
+  title: '{{title}}',
+  category: ChatCategoryEnum.{{categoryEnum}},
+  categoryName: ChatCategoryEnumName.{{categoryEnumName}},
+  package: PackagesCategoryEnum.VCHART,
+  chartFrame: ChartFrameEnum.VCHART,
+  image: '{{image}}'
+}

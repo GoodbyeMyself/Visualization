@@ -1,0 +1,20 @@
+import { PublicConfigClass } from '@/packages/public'
+import { CreateComponentType } from '@/packages/index.d'
+import { {{name}}Config } from './index'
+import cloneDeep from 'lodash/cloneDeep'
+import { chartInitConfig } from '@/settings/designSetting'
+
+export const option = {
+  colors: ['#4fd2dd', '#235fa7'],
+  backgroundColor: '#00000000',
+  fontSize: 16,
+  textColor: '#ffffff'{{#if (eq chartFrame 'COMMON')}},
+  dataset: 0{{/if}}
+}
+
+export default class Config extends PublicConfigClass implements CreateComponentType {
+  public key = {{name}}Config.key
+  public attr = { ...chartInitConfig, w: 200, h: 120, zIndex: 1 }
+  public chartConfig = cloneDeep({{name}}Config)
+  public option = cloneDeep(option)
+}

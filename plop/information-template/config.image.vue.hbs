@@ -1,0 +1,38 @@
+<template>
+  <CollapseItem name="属性" :expanded="true">
+    <SettingItemBox name="路径" :alone="true">
+      <SettingItem>
+        <n-input v-model:value="optionData.dataset" size="small"></n-input>
+      </SettingItem>
+    </SettingItemBox>
+    <SettingItemBox name="样式">
+      <SettingItem name="适应类型">
+        <n-select v-model:value="optionData.fit" size="small" :options="fitList"></n-select>
+      </SettingItem>
+      <SettingItem name="圆角">
+        <n-input-number v-model:value="optionData.borderRadius" size="small" :min="0"></n-input-number>
+      </SettingItem>
+    </SettingItemBox>
+  </CollapseItem>
+</template>
+
+<script setup lang="ts">
+import { PropType } from 'vue'
+import { option } from './config'
+import { CollapseItem, SettingItemBox, SettingItem } from '@/components/Pages/ChartItemSetting'
+
+defineProps({
+  optionData: {
+    type: Object as PropType<typeof option>,
+    required: true
+  }
+})
+
+const fitList = [
+  { value: 'fill', label: 'fill' },
+  { value: 'contain', label: 'contain' },
+  { value: 'cover', label: 'cover' },
+  { value: 'scale-down', label: 'scale-down' },
+  { value: 'none', label: 'none' }
+]
+</script>

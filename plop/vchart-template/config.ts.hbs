@@ -1,0 +1,57 @@
+import { PublicConfigClass } from '@/packages/public'
+import { {{name}}Config } from './index'
+import { CreateComponentType } from '@/packages/index.d'
+import { vChartOptionPrefixHandle } from '@/packages/public/vChart'
+import data from './data.json'
+import cloneDeep from 'lodash/cloneDeep'
+import axisThemeJson from '@/settings/vchartThemes/axis.theme.json'
+import { ChatCategoryEnum, {{optionType}} } from '../../index.d'
+
+export const includes = {{{includes}}}
+export const option: {{optionType}} & { dataset?: any } = {
+  type: '{{chartType}}',
+  dataset: data,
+{{#if (eq chartType 'pie')}}
+  categoryField: 'type',
+  valueField: 'value',
+  seriesField: 'type',
+  centerX: '50%',
+  centerY: '50%',
+  innerRadius: 0.68,
+  outerRadius: 0.75,
+  label: {
+    visible: true,
+    position: 'outside'
+  },
+  category: {{name}}Config.category as ChatCategoryEnum.{{categoryEnum}}
+{{else}}
+  xField: 'type',
+  yField: 'value',
+  seriesField: 'country',
+  category: {{name}}Config.category as ChatCategoryEnum.{{categoryEnum}},
+  xAxis: {
+    name: 'x轴',
+    ...axisThemeJson,
+    grid: {
+      ...axisThemeJson.grid,
+      visible: false
+    }
+  } as any,
+  yAxis: {
+    name: 'y轴',
+    ...axisThemeJson,
+    grid: {
+      ...axisThemeJson.grid,
+      style: {
+        ...axisThemeJson.grid.style
+      }
+    }
+  } as any
+{{/if}}
+}
+
+export default class Config extends PublicConfigClass implements CreateComponentType {
+  public key = {{name}}Config.key
+  public chartConfig = cloneDeep({{name}}Config)
+  public option = vChartOptionPrefixHandle(option, includes)
+}

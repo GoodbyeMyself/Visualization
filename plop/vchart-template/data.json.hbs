@@ -1,0 +1,22 @@
+{{#if (eq chartType 'pie')}}
+{
+  "values": [
+    { "type": "A", "value": 120 },
+    { "type": "B", "value": 200 },
+    { "type": "C", "value": 150 },
+    { "type": "D", "value": 80 },
+    { "type": "E", "value": 70 }
+  ]
+}
+{{else}}
+{
+  "values": [
+    { "type": "Mon", "country": "A", "value": 120 },
+    { "type": "Tue", "country": "A", "value": 200 },
+    { "type": "Wed", "country": "A", "value": 150 },
+    { "type": "Mon", "country": "B", "value": 130 },
+    { "type": "Tue", "country": "B", "value": 180 },
+    { "type": "Wed", "country": "B", "value": 160 }
+  ]
+}
+{{/if}}

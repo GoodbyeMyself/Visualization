@@ -1,0 +1,47 @@
+<template>
+  <CollapseItem name="{{title}}" :expanded="true">
+    <SettingItemBox name="颜色">
+      <SettingItem
+        :name="`颜色-${index + 1}`"
+        v-for="(item, index) in optionData.colors"
+        :key="index"
+      >
+        <n-color-picker
+          size="small"
+          :modes="['hex']"
+          v-model:value="optionData.colors[index]"
+        ></n-color-picker>
+      </SettingItem>
+    </SettingItemBox>
+    <SettingItemBox name="文字">
+      <SettingItem name="字号">
+        <n-input-number v-model:value="optionData.fontSize" size="small" :min="12"></n-input-number>
+      </SettingItem>
+      <SettingItem name="颜色">
+        <n-color-picker size="small" :modes="['hex']" v-model:value="optionData.textColor"></n-color-picker>
+      </SettingItem>
+    </SettingItemBox>
+    <SettingItemBox name="背景">
+      <SettingItem name="颜色">
+        <n-color-picker
+          size="small"
+          :modes="['hex']"
+          v-model:value="optionData.backgroundColor"
+        ></n-color-picker>
+      </SettingItem>
+    </SettingItemBox>
+  </CollapseItem>
+</template>
+
+<script setup lang="ts">
+import { PropType } from 'vue'
+import { CollapseItem, SettingItemBox, SettingItem } from '@/components/Pages/ChartItemSetting'
+import { option } from './config'
+
+defineProps({
+  optionData: {
+    type: Object as PropType<typeof option>,
+    required: true
+  }
+})
+</script>

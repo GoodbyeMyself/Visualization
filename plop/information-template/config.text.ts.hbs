@@ -1,0 +1,28 @@
+import { PublicConfigClass } from '@/packages/public'
+import { CreateComponentType } from '@/packages/index.d'
+import { {{name}}Config } from './index'
+import cloneDeep from 'lodash/cloneDeep'
+
+export const option = {
+  link: '',
+  linkHead: 'http://',
+  dataset: '{{title}}',
+  fontSize: 20,
+  fontColor: '#ffffff',
+  paddingX: 10,
+  paddingY: 10,
+  textAlign: 'center',
+  fontWeight: 'normal',
+  borderWidth: 0,
+  borderColor: '#ffffff',
+  borderRadius: 5,
+  letterSpacing: 2,
+  writingMode: 'horizontal-tb',
+  backgroundColor: '#00000000'
+}
+
+export default class Config extends PublicConfigClass implements CreateComponentType {
+  public key = {{name}}Config.key
+  public chartConfig = cloneDeep({{name}}Config)
+  public option = cloneDeep(option)
+}

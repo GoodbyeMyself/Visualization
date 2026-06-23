@@ -1,0 +1,47 @@
+<template>
+  <VChartGlobalSetting :optionData="optionData"></VChartGlobalSetting>
+{{#if (eq chartType 'pie')}}
+  <CollapseItem name="饼图" :expanded="true">
+    <SettingItemBox name="半径">
+      <SettingItem name="内半径">
+        <n-input-number v-model:value="optionData.innerRadius" :step="0.1" :min="0" size="small"></n-input-number>
+      </SettingItem>
+      <SettingItem name="外半径">
+        <n-input-number v-model:value="optionData.outerRadius" :step="0.1" :min="0" size="small"></n-input-number>
+      </SettingItem>
+    </SettingItemBox>
+  </CollapseItem>
+{{else}}
+  <Axis :axis="optionData.xAxis"></Axis>
+  <Axis :axis="optionData.yAxis"></Axis>
+  <Label :optionData="optionData"></Label>
+  {{#if (eq chartType 'bar')}}
+  <Bar :optionData="optionData"></Bar>
+  {{/if}}
+  {{#if (eq chartType 'line')}}
+  <Line :optionData="optionData"></Line>
+  <Point :optionData="optionData"></Point>
+  {{/if}}
+{{/if}}
+</template>
+
+<script setup lang="ts">
+import { PropType } from 'vue'
+import {
+  VChartGlobalSetting,
+  Axis,
+  Label,
+  Bar,
+  Line,
+  Point
+} from '@/components/Pages/VChartItemSetting'
+import { CollapseItem, SettingItemBox, SettingItem } from '@/components/Pages/ChartItemSetting'
+import { vChartGlobalThemeJsonType } from '@/settings/vchartThemes/index'
+
+defineProps({
+  optionData: {
+    type: Object as PropType<vChartGlobalThemeJsonType>,
+    required: true
+  }
+})
+</script>

@@ -1,0 +1,48 @@
+<template>
+  <global-setting :optionData="optionData"></global-setting>
+{{#if (eq chartType 'pie')}}
+  <CollapseItem name="{{title}}" :expanded="true">
+    <SettingItemBox name="半径">
+      <SettingItem name="内半径">
+        <n-input v-model:value="series.radius[0]" size="small" placeholder="如 40%" />
+      </SettingItem>
+      <SettingItem name="外半径">
+        <n-input v-model:value="series.radius[1]" size="small" placeholder="如 65%" />
+      </SettingItem>
+    </SettingItemBox>
+  </CollapseItem>
+{{else}}
+  <CollapseItem v-for="(item, index) in seriesList" :key="index" :name="`{{title}}-${index + 1}`" :expanded="true">
+    <SettingItemBox name="标签">
+      <SettingItem>
+        <n-space>
+          <n-switch v-model:value="item.label.show" size="small" />
+          <n-text>展示标签</n-text>
+        </n-space>
+      </SettingItem>
+      <SettingItem name="字号">
+        <n-input-number v-model:value="item.label.fontSize" size="small" :min="1"></n-input-number>
+      </SettingItem>
+    </SettingItemBox>
+  </CollapseItem>
+{{/if}}
+</template>
+
+<script setup lang="ts">
+import { PropType, computed } from 'vue'
+import { GlobalSetting, CollapseItem, SettingItemBox, SettingItem } from '@/components/Pages/ChartItemSetting'
+import { GlobalThemeJsonType } from '@/settings/chartThemes/index'
+
+const props = defineProps({
+  optionData: {
+    type: Object as PropType<GlobalThemeJsonType>,
+    required: true
+  }
+})
+
+{{#if (eq chartType 'pie')}}
+const series = computed(() => props.optionData.series[0])
+{{else}}
+const seriesList = computed(() => props.optionData.series)
+{{/if}}
+</script>

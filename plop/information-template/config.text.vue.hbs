@@ -1,0 +1,49 @@
+<template>
+  <CollapseItem name="信息" :expanded="true">
+    <SettingItemBox name="文字" :alone="true">
+      <SettingItem>
+        <n-input v-model:value="optionData.dataset" type="textarea" size="small"></n-input>
+      </SettingItem>
+    </SettingItemBox>
+  </CollapseItem>
+
+  <CollapseItem name="样式" :expanded="true">
+    <SettingItemBox name="文字">
+      <SettingItem name="颜色">
+        <n-color-picker size="small" :modes="['hex']" v-model:value="optionData.fontColor"></n-color-picker>
+      </SettingItem>
+      <SettingItem name="字体大小">
+        <n-input-number v-model:value="optionData.fontSize" size="small"></n-input-number>
+      </SettingItem>
+      <SettingItem name="水平对齐">
+        <n-select
+          v-model:value="optionData.textAlign"
+          size="small"
+          :options="[
+            { label: '左对齐', value: 'start' },
+            { label: '居中', value: 'center' },
+            { label: '右对齐', value: 'end' }
+          ]"
+        />
+      </SettingItem>
+    </SettingItemBox>
+    <SettingItemBox name="背景" :alone="true">
+      <SettingItem name="背景颜色">
+        <n-color-picker size="small" :modes="['hex']" v-model:value="optionData.backgroundColor"></n-color-picker>
+      </SettingItem>
+    </SettingItemBox>
+  </CollapseItem>
+</template>
+
+<script setup lang="ts">
+import { PropType } from 'vue'
+import { option } from './config'
+import { CollapseItem, SettingItemBox, SettingItem } from '@/components/Pages/ChartItemSetting'
+
+defineProps({
+  optionData: {
+    type: Object as PropType<typeof option>,
+    required: true
+  }
+})
+</script>
